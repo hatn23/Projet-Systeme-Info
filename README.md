@@ -2,7 +2,13 @@
 
 Pour compiler le lex: <br/>
 `flex compilo.l` <br/>
-`gcc lex.yy.c` <br/>
+
+
+Pour compiler le yacc: <br/>
+`yacc -d compilo.y`
+
+Pour compiler les deux fichiers
+`gcc lex.yy.c y.tab.c -o rest` <br/>
 
 ## Test:
 `./a.out < test.c` <br/>

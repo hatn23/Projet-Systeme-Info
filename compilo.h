@@ -26,5 +26,9 @@
 #define tSUPEQUAL 26
 #define tERROR 27
 #define YYSTYPE int 
+#define tPRINTF 28
+#define tVAR 29
+#define tOA 30
+#define tCA 31
 YYSTYPE yylval;
 // extern YYSTYPE yytext;
