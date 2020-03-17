@@ -29,41 +29,58 @@
 %start S 
 %%
 
-S:          FunctionMain {printf("Function main");}
+S:          FunctionMain {printf("Function main\n");}
             ;
-FunctionMain: tINT {printf("prout\n");} tMain tOB tCB Body {printf("int main()");}
+FunctionMain: tINT {printf("int ");} tMain {printf("tMain ");} tOB{printf("tOB ");} tCB {printf("tCB ");} Body 
             |
             ;
+
 Vide:       ;
+
 Arg:        Type tVAR Args
             |Vide
             ;
+            
 Args:       tSEP Arg 
             |Vide
             ;
-Type:       tINT {printf("int");}
-            |tFLOAT {printf("float");}
-            |tCHAR {printf("char");}
-            ;
-Body:       tOA Contenu tRET tINT tCA ;
 
-Contenu:     Aff
+Type:       tINT {printf("int ");}
+            |tFLOAT {printf("float ");}
+            |tCHAR {printf("char ");}
+            ;
+
+Body:       tOA {printf("tOA ");} Contenus tCA{printf("tCA ");} 
+            ;
+
+Contenus:   Contenu Contenus
+            |Contenu
+            ;
+
+Contenu:     Aff 
             |Print
             |Declaration;
-Declaration:Type tVAR Vars tSEMCOL;
+
+Declaration:Type tVAR Vars tSEMCOL {printf("Declaration \n");}
+            ;
+
 Vars:       tSEP tVAR Vars 
             |Vide
             ;
-Print:      tPRINTF tOB tVAR tCB tSEMCOL
+
+Print:      tPRINTF tOB tVAR tCB tSEMCOL {printf("tPrintf \n ");}
             ;
-Aff:        tVAR tEQUAL E tSEMCOL
+
+Aff:        tVAR tEQUAL E tSEMCOL {printf("Affectation\n");}
             ;
-E:          tREAL {printf("%f",$1);}
-            |tNUMBER {printf("%d",$1);}
-            |tVAR {printf("%s",$1);}
+
+E:          tREAL {printf("tREAL");}
+            |tNUMBER  {printf("tNUMBER");}
+            |tVAR  {printf("tVAR");}
             |tOB E tCB
             |Exp
             ;
+
 Exp:        E tADD E 
             |E tSUB E 
             |E tMUL E 
