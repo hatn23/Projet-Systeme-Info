@@ -31,7 +31,7 @@
 
 S:          FunctionMain {printf("Function main\n");}
             ;
-FunctionMain: tINT {printf("int ");} tMain {printf("tMain ");} tOB{printf("tOB ");} tCB {printf("tCB ");} Body 
+FunctionMain:tMain {printf("tMain ");} tOB{printf("tOB ");} tCB {printf("tCB ");} Body 
             |
             ;
 
