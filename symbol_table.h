@@ -15,18 +15,17 @@ typedef struct{
 	char* name;	
 	unsigned int depth; //size of each element
 	unsigned int addr; //address in the memory
-    int isIntialised;	
-    int isTmp;	
+    int isIntialised;		
 } symbole;
 
 //push 
-void push(symbol s);
+void push(T_Type type, char* name);
 
 //pop 
 void pop();
 
 //create symbol
-symbol createSymbol(T_Type type, char* name, unsigned int depth, unsigned int addr,int isIntialised, int isTmp);
+symbol createSymbol(T_Type type, char* name);
 
 //return 1 if the symbol is initialised
 //else return 0
@@ -45,8 +44,5 @@ void printSymbol(symbol sym);
 //print symbol table
 void printSymbolTable(symbol* symTab);
 
-//if the symbol exists in the table, return the address of the symbol 
-//else return -1
-int getAddr(char* var);
 
 
