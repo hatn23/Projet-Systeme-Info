@@ -95,9 +95,9 @@ typedef struct instruction {
     int r2;
     int r3;
 } instruction;
-
-void ajouter_operation(char *operation,int r1, int r2, int r3 );
-int current_line();
+void add_instruction2(char *operation, int r1, r2);
+void add_instruction3(char *operation,int r1, int r2, int r3 );
+int get_index_tab();
 symbol *binary_affectation();
 void interpreter();
 
