@@ -28,6 +28,9 @@ void pop();
 //create symbol
 symbol* createSymbol(T_Type type, char* name, int isInitialised);
 
+//create symbol temporaire
+symbol *createTmpSymbol(T_Type type)''
+
 //return 1 if the symbol is initialised
 //else return 0
 int isInitialised(symbol s);

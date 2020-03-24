@@ -67,6 +67,10 @@ symbol* createSymbol(T_Type type, char* name, int isConstant){
 	return s;
 }
 
+symbol *createTmpSymbol(T_Type type) {
+    return createSymbol("tmpSymbol", type, 0);
+}
+
 //return 1 if the symbol is initialised
 //else return 0
 int isInitialised(symbol s){

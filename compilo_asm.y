@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <math.h>
+    #include <symbol_table.h>
 %}
 
 %union{
@@ -31,9 +32,9 @@
 %start S 
 %%
 
-S:          FunctionMain {printf("Function main\n");}
+S:          FunctionMain
             ;
-FunctionMain:tMain {printf("tMain ");} tOB{printf("tOB ");} tCB {printf("tCB ");} Body 
+FunctionMain:tMain  tOB tCB  Body 
             |
             ;
 
@@ -47,11 +48,11 @@ Args:       tSEP Arg
             |Vide
             ;
 
-Type:       tINT {printf("int ");}
-            |tCHAR {printf("char ");}
+Type:       tINT { $$ = T_Type = Integer; }
+            |tCHAR { $$ =T_Type  = Character; }
             ;
 
-Body:       tOA {printf("tOA ");} Contenus tCA{printf("tCA ");} 
+Body:       tOA  Contenus tCA 
             ;
 
 Contenus:   Contenu Contenus
@@ -62,30 +63,31 @@ Contenu:     Aff
             |Print
             |Declaration;
 
-Declaration:Type tVAR Vars tSEMCOL {printf("Declaration \n");}
+//comment savoir le vars ici c'est un const?
+Declaration:Type tVAR Vars tSEMCOL /*{push($1,$2,???);}*/
             ;
 
 Vars:       tSEP tVAR Vars 
             |Vide
             ;
 
-Print:      tPRINTF tOB tVAR tCB tSEMCOL {printf("tPrintf \n ");}
+Print:      tPRINTF tOB tVAR tCB tSEMCOL 
             ;
 
-Aff:        tVAR tEQUAL E tSEMCOL {printf("Affectation \n");}
+Aff:        tVAR tEQUAL E tSEMCOL 
             ;
 
-E:          tREAL {printf("tREAL ");}
-            |tNUMBER  {printf("tNUMBER ");}
-            |tVAR  {printf("tVAR ");}
+E:          tREAL 
+            |tNUMBER  
+            |tVAR  
             |tOB E tCB
             |Exp
             ;
 
-Exp:        E tADD E {printf(" + ");}
-            |E tSUB E  {printf(" - ");}
-            |E tMUL E {printf(" x ");}
-            |E tDIV E {printf(" / ");}
+Exp:        E tADD E 
+            |E tSUB E  
+            |E tMUL E 
+            |E tDIV E 
             ;           
 
 %%
