@@ -19,21 +19,36 @@ typedef struct{
     int isConstant; // const =1 		
 } symbol;
 
+
 //push 
 void push(T_Type type, char* name, int isConstant);
 
 //pop 
 void pop();
 
+//increment depth
+void incrementDepth();
+
+//decrement depth
+void decrementDepth();
+
 //create symbol
 symbol* createSymbol(T_Type type, char* name, int isInitialised);
 
 //create symbol temporaire
-symbol *createTmpSymbol(T_Type type)''
+symbol *createTmpSymbol(T_Type type);
 
 //return 1 if the symbol is initialised
 //else return 0
 int isInitialised(symbol s);
+
+//return index if the symbol is found in the symbolTable
+//else return 0
+int isExist(symbol s);
+
+//return 1 if the symbol is constant
+//else return 0
+int isConstant(symbol s);
 
 //return 1 if the symbol is a temporary symbol
 //else return 0

@@ -52,7 +52,7 @@ Type:       tINT { $$ = T_Type = Integer; }
             |tCHAR { $$ =T_Type  = Character; }
             ;
 
-Body:       tOA  Contenus tCA 
+Body:       tOA {incrementDepth()}  Contenus tCA {decrementDepth()}
             ;
 
 Contenus:   Contenu Contenus
@@ -61,24 +61,51 @@ Contenus:   Contenu Contenus
 
 Contenu:     Aff 
             |Print
+            |Const
             |Declaration;
 
-//comment savoir le vars ici c'est un const?
-Declaration:Type tVAR Vars tSEMCOL /*{push($1,$2,???);}*/
+
+Declaration:Type tVAR Vars tSEMCOL 
+            {
+             push($1,$2,0);
+             printf("Declaration variable : %s \n",$3);
+             }
+            ;
+
+Const:      tCONST Type tVAR VarsConst tSEMCOL 
+            {push($1,$2,1); 
+            printf("Declaration constant : %s \n",$3);
+            }
             ;
 
 Vars:       tSEP tVAR Vars 
+            {push($1,$2,0); 
+            printf("Declaration variable ++ : %s \n",$3);}
+            |Vide
+            ;
+
+VarsConst:   tSEP tVAR VarsConst 
+            {push($1,$2,1); 
+            printf("Declaration constant ++ : %s \n",$3);} 
             |Vide
             ;
 
 Print:      tPRINTF tOB tVAR tCB tSEMCOL 
+            {printf("printf %s \n", $3);}
             ;
+
 
 Aff:        tVAR tEQUAL E tSEMCOL 
+            {if(isExist($1)){
+                if(!isConstant($1)){
+                   // XXXXXXXXXXXX Mise a jour la valeur de symbol (AFC?)XXXXXXXXXXXXXXXXXXX
+                }
+            }
+            }
             ;
 
-E:          tREAL 
-            |tNUMBER  
+E:          tREAL   {$$=$1;}
+            |tNUMBER  {$$=$1;}
             |tVAR  
             |tOB E tCB
             |Exp
