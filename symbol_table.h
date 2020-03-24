@@ -13,19 +13,20 @@ typedef enum Type {
 typedef struct{
     T_Type type;
 	char* name;	
-	unsigned int depth; //size of each element
+	unsigned int depth; // porte de variable
 	unsigned int addr; //address in the memory
-    int isInitialised;		
+    int isInitialised;
+    int isConstant; // const =1 		
 } symbol;
 
 //push 
-void push(T_Type type, char* name);
+void push(T_Type type, char* name, int isConstant);
 
 //pop 
 void pop();
 
 //create symbol
-symbol* createSymbol(T_Type type, char* name);
+symbol* createSymbol(T_Type type, char* name, int isInitialised);
 
 //return 1 if the symbol is initialised
 //else return 0

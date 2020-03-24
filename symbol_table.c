@@ -8,14 +8,14 @@ int globalDepth=0;
 int ESP=0;
 char* tmpTable;
 
-void push(T_Type type, char* name){
+void push(T_Type type, char* name,int isConstant){
 	//
 	if (currentPosition>=TABLESIZE-1){
 		printf("TABLE FULL\n");
 	}
 	else {
 		
-		symbol* s =createSymbol(type,name);
+		symbol* s =createSymbol(type,name,isConstant);
 		//verify if the symbol doesnt exists in the table
 		if(s!=NULL){
 		//find the corresponding element in the table
@@ -45,7 +45,7 @@ void pop(){
 }
 
 //create symbol
-symbol* createSymbol(T_Type type, char* name){
+symbol* createSymbol(T_Type type, char* name, int isConstant){
 	//if symbolTable is not empty
 	if(currentPosition!=-1){
 		for (int i=0;i<currentPosition;i++){
@@ -61,8 +61,9 @@ symbol* createSymbol(T_Type type, char* name){
 	s->name=strdup(name);
 	s->depth=globalDepth;
 	s->addr=ESP;
-	ESP=ESP + 4; //on reserve 1 octet pour chaque symbol
+	ESP=ESP++; //on reserve 1 octet pour chaque symbol
 	s->isInitialised=0;
+	s->isConstant=isConstant;
 	return s;
 }
 
@@ -70,6 +71,12 @@ symbol* createSymbol(T_Type type, char* name){
 //else return 0
 int isInitialised(symbol s){
 	return s.isInitialised;
+}
+
+//return 1 if the symbol is constant
+//else return 0
+int isConstant(symbol s){
+	return s.isConstant;
 }
 
 //return 0 if the symbol is a temporary symbol
@@ -97,10 +104,10 @@ void printSymbolTable(){
 
 
 int main() {
-	push(Integer,"test");
+	push(Integer,"test",1);
 	printf("currentPosition=%d\n",currentPosition);
 	printSymbolTable();
-	push(Integer,"test2");
+	push(Integer,"test2",1);
 	printf("currentPosition=%d\n",currentPosition);
 	printSymbolTable();
 	pop();
