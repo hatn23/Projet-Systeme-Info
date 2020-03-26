@@ -11,6 +11,7 @@
     float reel;
 }
 
+int globalDepth =0 ;
 %token<number>  tNUMBER 
 %token<reel> tREAL
 %token<str> tVAR
@@ -52,7 +53,7 @@ Type:       tINT { $$ = T_Type = Integer; }
             |tCHAR { $$ =T_Type  = Character; }
             ;
 
-Body:       tOA {incrementDepth()}  Contenus tCA {decrementDepth()}
+Body:       tOA {globalDepth++}  Contenus tCA {globalDepth--;}
             ;
 
 Contenus:   Contenu Contenus
@@ -65,30 +66,27 @@ Contenu:     Aff
             |Declaration;
 
 
-Declaration:Type tVAR Vars tSEMCOL 
+Declaration:Type tVAR 
             {
-             push($1,$2,0);
-             printf("Declaration variable : %s \n",$3);
-             }
+             pushSymbol($1,$2,0,globalDepth);
+            } AffectationDuringDeclaration MultipleDeclaration
+            | tCONST tINT tVAR 
+            {
+                pushSymbol($1,$2,1,globalDepth);
+            }AffectationDuringDeclaration MultipleDeclaration
             ;
 
-Const:      tCONST Type tVAR VarsConst tSEMCOL 
-            {push($1,$2,1); 
-            printf("Declaration constant : %s \n",$3);
-            }
-            ;
+MultipleDeclaration: tSEP tVAR{
+                    if(isConstant(getLastSymbol())==1){
+                        pushSymbol($1,$2,1,globalDepth);
+                    }
+                    else{
+                        pushSymbol($1,$2,0,globalDepth);
+                    } }AffectationDuringDeclaration MultipleDeclaration
+                    | tSEMCOL
+                    ;
 
-Vars:       tSEP tVAR Vars 
-            {push($1,$2,0); 
-            printf("Declaration variable ++ : %s \n",$3);}
-            |Vide
-            ;
-
-VarsConst:   tSEP tVAR VarsConst 
-            {push($1,$2,1); 
-            printf("Declaration constant ++ : %s \n",$3);} 
-            |Vide
-            ;
+AffectationDuringDeclaration: tEQUAL E{ exec_affectation(getLastSymbol()); };
 
 Print:      tPRINTF tOB tVAR tCB tSEMCOL 
             {printf("printf %s \n", $3);}
@@ -96,17 +94,25 @@ Print:      tPRINTF tOB tVAR tCB tSEMCOL
 
 
 Aff:        tVAR tEQUAL E tSEMCOL 
-            {if(isExist($1)){
+            {if(findSymbol($1)){
                 if(!isConstant($1)){
-                   // XXXXXXXXXXXX Mise a jour la valeur de symbol (AFC?)XXXXXXXXXXXXXXXXXXX
+                   exec_affectation($1);
                 }
+                else{
+                    yyerror("Temptation to modify a constant ");
+                }
+            }else{
+                yyerror("Variable is never declared");
             }
             }
             ;
 
-E:          tREAL   {$$=$1;}
-            |tNUMBER  {$$=$1;}
-            |tVAR  
+E:          tREAL       {$$=$1;
+                        pushTmp
+
+                        }
+            |tNUMBER    {$$=$1;}
+            |tVAR       
             |tOB E tCB
             |Exp
             ;
@@ -118,6 +124,7 @@ Exp:        E tADD E
             ;           
 
 %%
+
 void yyerror(char *s){
 printf("%s\n",s);
 
