@@ -7,8 +7,7 @@ int currentPosition = -1;
 
 int ESP = 0;
 
-char* tmpTable[TABLESIZE];
-int stackpointer= -1;
+int stackpointer= TABLESIZE;
 
 symbol *createSymbol(char *name, int isConstant, int depth)
 {
@@ -52,19 +51,14 @@ int pushSymbol(char *name, int isConstant,int depth)
 	return currentPosition;
 }
 
-int pushTmp(char *name)
+int pushTmp()
 {
-	if (currentPosition >= TABLESIZE - 1)
-	{
-		printf("TABLE FULL\n");
-	}
-	else
-	{
-		char *s = malloc(sizeof(name));
-		stackpointer++;
-		tmpTable[stackpointer] = s;
-	}
-	return stackpointer;
+	return stackpointer++;
+}
+
+int popTmp()
+{
+	return stackpointer--;
 }
 
 void popSymbol()
@@ -73,10 +67,6 @@ void popSymbol()
 	currentPosition--;
 }
 
-void popTmp(){
-	free(tmpTable[stackpointer]);
-	stackpointer--;
-}
 
 symbol getLastSymbol(){
 	return *symbolTable[currentPosition];
@@ -133,6 +123,7 @@ void printSymbolTable()
 	printf("currentPosition = %d\n", currentPosition);
 	for (int i = 0; i < currentPosition + 1; i++)
 	{
+		printf("[%d]",i);
 		printSymbol(symbolTable[i]);
 	}
 	printf("-------------------------\n");
@@ -141,11 +132,7 @@ void printSymbolTable()
 void printTmpTable(){
 
 	printf("-------------------------\n");
-	printf(" %d temporary variable now\n", stackpointer);
-	// for (int i = 0; i < stackpointer + 1; i++)
-	// {
-	// 	printf("name = %s  \n", tmpTable[i]->name);
-	// }
+	printf(" stackpointer = %d\n", stackpointer);
 	printf("-------------------------\n");
 }
 
@@ -155,9 +142,9 @@ void printTmpTable(){
 // 	pushSymbol( "test2", 1,0);
 // 	pushSymbol( "test3", 1,0);
 // 	printSymbolTable();
-// 	popSymbol();
+// 	// popSymbol();
 // 	printSymbolTable();
-// 	// int index = findSymbol("test3",0);
-// 	// printf("index= %d\n", index);
-// 	// printSymbolTable();
+// 	int index = findSymbol("test3",0);
+// 	printf("index= %d\n", index);
+// 	printSymbolTable();
 // }

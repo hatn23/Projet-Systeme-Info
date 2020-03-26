@@ -13,11 +13,11 @@ typedef struct{
 
 int pushSymbol(char* name, int isConstant, int depth);
 
-int pushTmp( char* name);
+int pushTmp( );
 
 void popSymbol();
 
-void popTmp();
+int popTmp();
 
 //return the last symbol read by the parser
 symbol getLastSymbol();

@@ -2,7 +2,7 @@
 all : compilo
 lex.yy.c : compilo.l
 		flex compilo.l
-compilo.tab.c : compilo.y
+compilo.tab.c : compilo_asm.y
 		yacc -d -v compilo_asm.y
 symbol_table.o: symbol_table.c
 		$(CC) $(CFLAGS) -c symbol_table.c
@@ -12,5 +12,3 @@ clean:
 		rm -rf compilo lex.yy.c y.tab.c *.o
 test:
 		./compilo < test.c
-
-

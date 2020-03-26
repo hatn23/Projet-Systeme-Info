@@ -71,13 +71,13 @@ Declaration:Type tVAR
              pushSymbol($2,0,globalDepth);
              printf("Declaration 1\n");
              printSymbolTable();
-            } AffectationDuringDeclaration MultipleDeclaration
+            } AffectationDuringDeclaration MultipleDeclaration tSEMCOL
             | tCONST tINT tVAR 
             {
              pushSymbol($3,1,globalDepth);
              printf("Declaration 1 const\n");
              printSymbolTable();
-            }AffectationDuringDeclaration MultipleDeclaration
+            }AffectationDuringDeclaration MultipleDeclaration tSEMCOL
             ;
 
 MultipleDeclaration: tSEP tVAR{
@@ -91,21 +91,21 @@ MultipleDeclaration: tSEP tVAR{
                         printf("Multiple declaration\n");
                         printSymbolTable();
                     } }AffectationDuringDeclaration MultipleDeclaration
-                    | tSEMCOL
+                    | Vide
                     ;
 
-AffectationDuringDeclaration: tEQUAL E{ printf("affection a faire en ASM\n"); };
+AffectationDuringDeclaration: tEQUAL E{ printf("affection a faire en ASM\n"); }
+                              |Vide;
 
 Print:      tPRINTF tOB tVAR tCB tSEMCOL 
-            {printf("printf %s \n", $3);
-             
-            }
+            {printf("printf %s \n", $3); }
             ;
 
 
 Aff:        tVAR tEQUAL E tSEMCOL 
-            {if(findSymbol($1,globalDepth)){
-                if(!isConstant($1,globalDepth)){
+            {   printSymbolTable();
+                if(findSymbol($1,globalDepth)!=-1){
+                if(isConstant($1,globalDepth)!=0){
                    { printf("affection a faire en ASM\n"); };
                 }
                 else{
@@ -118,11 +118,11 @@ Aff:        tVAR tEQUAL E tSEMCOL
             ;
 
 E:          tREAL       {
-                        pushTmp("$");
+                        pushTmp();
                         printf("meet a float\n");
                         printTmpTable();}
             |tNUMBER    {
-                        pushTmp("$");
+                        pushTmp();
                         printf("meet a int\n");
                         printTmpTable();}
             |tVAR       {int index=findSymbol($1,globalDepth);
