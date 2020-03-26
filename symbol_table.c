@@ -115,6 +115,10 @@ tmp *createTmpSymbol(T_Type type, char *name)
 symbol getLastSymbol(){
 	return *symbolTable[currentPosition];
 }
+
+int getaddrtmp(){
+	return tmpTable[stackpointer]->addr;
+}
 //return 1 if the symbol is initialised
 //else return 0
 int isInitialised(symbol s)

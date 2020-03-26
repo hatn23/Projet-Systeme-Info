@@ -38,6 +38,8 @@ tmp *createTmpSymbol(T_Type type, char* name);
 //return the last symbol read by the parser
 symbol getLastSymbol();
 
+int getaddrtmp();
+
 //return 1 if the symbol is initialised
 //else return 0
 int isInitialised(symbol s);
