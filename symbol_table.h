@@ -2,64 +2,44 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum Type {
-    Integer,
-    Character,
-    Boolean,
-    Void,
-    Error
-} T_Type;
 
+//indice de tableau = address
 typedef struct{
-    T_Type type;
 	char* name;	
 	unsigned int depth; // porte de variable
-	unsigned int addr; //address in the memory
     int isInitialised;
-    int isConstant; // const =1 		
+    int isConstant; //=1 		
 } symbol;
 
-typedef struct{
-    T_Type type;
-    char* name;	
-	unsigned int addr; //address in the memory
-}tmp;
+int pushSymbol(char* name, int isConstant, int depth);
 
-void pushSymbol(T_Type type, char* name, int isConstant, int depth);
+int pushTmp( char* name);
 
-void pushTmp(T_Type type, char* name);
+void popSymbol();
 
-//create symbol
-symbol* createSymbol(T_Type type, char* name, int isInitialised, int depth);
-
-//create symbol temporaire
-tmp *createTmpSymbol(T_Type type, char* name);
+void popTmp();
 
 //return the last symbol read by the parser
 symbol getLastSymbol();
 
-int getaddrtmp();
+//return address of the temporary variable if the variable is found in the table
+//else return -1
+int getaddrtmp(char* name);
 
 //return 1 if the symbol is initialised
 //else return 0
-int isInitialised(symbol s);
+int isInitialised(char* name,int depth);
 
-//return index if the symbol is found in the symbolTable
+//return index(address) if the symbol is found in the symbolTable
 //else return 0
 int findSymbol(char* name,int depth);
 
 //return 1 if the symbol is constant
 //else return 0
-int isConstant(symbol s);
-
-//Free temporary symbol
-void freeTmp(symbol* s);
-
-//print symbol
-void printSymbol(symbol* sym);
+int isConstant(char* name,int depth);
 
 //print symbol table
 void printSymbolTable();
 
-
+void printTmpTable();
 

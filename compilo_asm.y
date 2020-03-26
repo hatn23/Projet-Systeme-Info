@@ -2,26 +2,35 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <math.h>
-    #include <symbol_table.h>
+    #include "symbol_table.h"
+    //#include "assembleur.h"
+
+    int yylex(void);
+    int yydebug = 1;
+
+    void yyerror (char const *s) {
+      extern int yylineno;
+      fprintf (stderr, "ERROR (%d): %s\n", yylineno, s);
+  }
+
+    int globalDepth =0 ;
 %}
 
 %union{
-    char *str;
+    char* str;
     int number;
     float reel;
 }
 
-int globalDepth =0 ;
 %token<number>  tNUMBER 
 %token<reel> tREAL
 %token<str> tVAR
-%token  tADD tSUB tDIV tMUL tEQUAL
+%token  tDIV tMUL tADD tSUB  tEQUAL
 %token  tOB tCB tOA tCA
-%token  tINT tCHAR tVOID tERROR
+%token  tINT tCHAR tVOID tERROR tFLOAT
 %token  tSEMCOL tSEP
 %token  tMain tRET tWHILE tIF tELSE tCONST tPRINTF
 %token  tCMP tINF tSUP tINFEQUAL tSUPEQUAL
-
 
 %left tSEP 
 %right tEQUAL tADD tSUB tMUL tDIV 
@@ -35,25 +44,17 @@ int globalDepth =0 ;
 
 S:          FunctionMain
             ;
-FunctionMain:tMain  tOB tCB  Body 
+FunctionMain:tINT tMain  tOB tCB  Body 
             |
             ;
 
 Vide:       ;
 
-Arg:        Type tVAR Args
-            |Vide
-            ;
-            
-Args:       tSEP Arg 
-            |Vide
+Type:       tINT 
+            |tCHAR 
             ;
 
-Type:       tINT { $$ = T_Type = Integer; }
-            |tCHAR { $$ =T_Type  = Character; }
-            ;
-
-Body:       tOA {globalDepth++}  Contenus tCA {globalDepth--;}
+Body:       tOA {globalDepth++;}  Contenus tCA {globalDepth--;}
             ;
 
 Contenus:   Contenu Contenus
@@ -62,41 +63,50 @@ Contenus:   Contenu Contenus
 
 Contenu:     Aff 
             |Print
-            |Const
             |Declaration;
 
 
 Declaration:Type tVAR 
             {
-             pushSymbol($1,$2,0,globalDepth);
+             pushSymbol($2,0,globalDepth);
+             printf("Declaration 1\n");
+             printSymbolTable();
             } AffectationDuringDeclaration MultipleDeclaration
             | tCONST tINT tVAR 
             {
-                pushSymbol($1,$2,1,globalDepth);
+             pushSymbol($3,1,globalDepth);
+             printf("Declaration 1 const\n");
+             printSymbolTable();
             }AffectationDuringDeclaration MultipleDeclaration
             ;
 
 MultipleDeclaration: tSEP tVAR{
-                    if(isConstant(getLastSymbol())==1){
-                        pushSymbol($1,$2,1,globalDepth);
+                    if(isConstant(getLastSymbol().name,getLastSymbol().depth)==1){
+                        pushSymbol($2,1,globalDepth);
+                        printf("Multiple declaration const\n");
+                        printSymbolTable();
                     }
                     else{
-                        pushSymbol($1,$2,0,globalDepth);
+                        pushSymbol($2,0,globalDepth);
+                        printf("Multiple declaration\n");
+                        printSymbolTable();
                     } }AffectationDuringDeclaration MultipleDeclaration
                     | tSEMCOL
                     ;
 
-AffectationDuringDeclaration: tEQUAL E{ exec_affectation(getLastSymbol()); };
+AffectationDuringDeclaration: tEQUAL E{ printf("affection a faire en ASM\n"); };
 
 Print:      tPRINTF tOB tVAR tCB tSEMCOL 
-            {printf("printf %s \n", $3);}
+            {printf("printf %s \n", $3);
+             
+            }
             ;
 
 
 Aff:        tVAR tEQUAL E tSEMCOL 
-            {if(findSymbol($1)){
-                if(!isConstant($1)){
-                   exec_affectation($1);
+            {if(findSymbol($1,globalDepth)){
+                if(!isConstant($1,globalDepth)){
+                   { printf("affection a faire en ASM\n"); };
                 }
                 else{
                     yyerror("Temptation to modify a constant ");
@@ -107,28 +117,30 @@ Aff:        tVAR tEQUAL E tSEMCOL
             }
             ;
 
-E:          tREAL       {$$=$1;
-                        pushTmp
+E:          tREAL       {
+                        pushTmp("$");
+                        printf("meet a float\n");
+                        printTmpTable();}
+            |tNUMBER    {
+                        pushTmp("$");
+                        printf("meet a int\n");
+                        printTmpTable();}
+            |tVAR       {int index=findSymbol($1,globalDepth);
+                        if(index){
+                            if(!isInitialised($1,globalDepth)){
+                                yyerror("non initialised variable");
+                            }
+                        printf("affection a faire en ASM\n"); };
 
                         }
-            |tNUMBER    {$$=$1;}
-            |tVAR       
-            |tOB E tCB
-            |Exp
-            ;
-
-Exp:        E tADD E 
-            |E tSUB E  
+            |E tADD E 
+            |E tSUB E 
             |E tMUL E 
             |E tDIV E 
-            ;           
+            ;      
 
 %%
-
-void yyerror(char *s){
-printf("%s\n",s);
-
-}
 int main(void){
     yyparse();
+    return 0;
 }
