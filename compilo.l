@@ -14,33 +14,28 @@ ALPHABET    [A-Za-z]
 ALPHANUM    {ALPHABET}({ALPHABET}|{NUMBER}|"_")*?
 
 %%
+{SPACE}     {}
+{TAB}       {}
+{NEWLINE}   {}
 "main"      {return (tMain);}
+"{"         {return (tOA);}
+"}"         {return (tCA);}
+"("         {return (tOB);}
+")"         {return (tCB);}
 "int"       {return (tINT);}
 "const"     {return (tCONST);}
 "char"      {return (tCHAR);}
 "float"     {return (tFLOAT);}
 "void"      {return (tVOID);}
-"printf"    {return(tPRINTF);}
-"if"        {return (tIF);}
-"else"      {return (tELSE);}
-"return"    {return (tRET);}
-{SPACE}       {}
-{TAB}       {}
-{NEWLINE}   {}
-{NUMBER}    {yylval.number=atoi(yytext);
-             return (tNUMBER);}
-{REAL}      {yylval.reel=atof(yytext);
-             return (tREAL);} 
-{ALPHANUM}  {yylval.str=yytext;
-             return (tVAR);}
-
 "+"         {return (tADD);}
 "-"         {return (tSUB);}
 "*"         {return (tMUL);}
 "/"         {return (tDIV);}
 "="         {return (tEQUAL);}
-"("         {return (tOB);}
-")"         {return (tCB);}
+"if"        {return (tIF);}
+"else"      {return (tELSE);}
+"while"     {return (tWHILE);}
+"return"    {return (tRET);}
 "=="        {return (tCMP);}
 ","         {return (tSEP);}
 ";"         {return (tSEMCOL);}
@@ -48,8 +43,16 @@ ALPHANUM    {ALPHABET}({ALPHABET}|{NUMBER}|"_")*?
 ">"         {return (tSUP);}
 "<="        {return (tINFEQUAL);}
 ">="        {return (tSUPEQUAL);}
-"{"         {return (tOA);}
-"}"         {return (tCA);}
+"printf"    {return(tPRINTF);}
+
+{NUMBER}    {yylval.number=atoi(yytext);
+             return (tNUMBER);}
+{REAL}      {yylval.reel=atof(yytext);
+             return (tREAL);} 
+{ALPHANUM}  {yylval.str=yytext;
+             return (tVAR);}
+
+
 .           {return (tERROR);}
 
 %%

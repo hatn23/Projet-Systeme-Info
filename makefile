@@ -1,4 +1,3 @@
-
 all : compilo
 lex.yy.c : compilo.l
 		flex compilo.l
@@ -10,5 +9,6 @@ compilo : lex.yy.c y.tab.c symbol_table.o
 		$(CC) $(CFLAGS) lex.yy.c y.tab.c -o compilo $(INC) symbol_table.o
 clean:
 		rm -rf compilo lex.yy.c y.tab.c *.o
+		yacc -d compilo_asm.y
 test:
 		./compilo < test.c

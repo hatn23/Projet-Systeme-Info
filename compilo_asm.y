@@ -97,16 +97,17 @@ MultipleDeclaration: tSEP tVAR{
 AffectationDuringDeclaration: tEQUAL E{ printf("affection a faire en ASM\n"); }
                               |Vide;
 
-Print:      tPRINTF tOB tVAR tCB tSEMCOL 
-            {printf("printf %s \n", $3); }
+Print:      tPRINTF tOB tVAR {printf("printf %s\n", $3); } tCB tSEMCOL 
+            
             ;
 
 
-Aff:        tVAR tEQUAL E tSEMCOL 
-            {   printSymbolTable();
-                if(findSymbol($1,globalDepth)!=-1){
-                if(isConstant($1,globalDepth)!=0){
-                   { printf("affection a faire en ASM\n"); };
+Aff:        tVAR 
+            {printSymbolTable();
+            printf("traitement d'affectation de %s\n", $1);
+            if(findSymbol($1,globalDepth)!=-1){
+                if(isConstant($1,globalDepth)==0){
+                   printf("affection a faire en ASM\n");
                 }
                 else{
                     yyerror("Temptation to modify a constant ");
@@ -114,7 +115,7 @@ Aff:        tVAR tEQUAL E tSEMCOL
             }else{
                 yyerror("Variable is never declared");
             }
-            }
+            }tEQUAL E tSEMCOL 
             ;
 
 E:          tREAL       {
