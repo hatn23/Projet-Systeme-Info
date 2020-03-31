@@ -1,4 +1,4 @@
-#include "symbol_table.h"
+//#include "symbol_table.h"
 #include "assembleur.h"
 
 #define MAX_TABLESIZE 4000
@@ -10,7 +10,7 @@ int registre[15];
 
 void add_instruction(char *operation,int r1, int r2, int r3){
     struct instruction add;
-    add.operation = strdup(operation);
+    strcpy(add.operation, operation);
     add.r1 = r1;
     add.r2 = r2;
     add.r3 = r3;
@@ -34,62 +34,74 @@ void interpreter(){
        int r2 = tab_instruction[index_execute].r2;
        int r3 = tab_instruction[index_execute].r3;
        if (!strcmp(operation, "ADD")) {
+           // ADD @résultat @opérande1 @opérande2
 			registre[r1] = registre[r3] + registre[r2];
         } 
         else if (!strcmp(operation, "MUL")) {
+            // MUL @résultat @opérande1 @opérande2
             registre[r1] = registre[r3] * registre[r2];
         }
         else if (!strcmp(operation, "SOU")) {
+            // SOU @résultat @opérande1 @opérande2
             registre[r1] = registre[r3] - registre[r2];
         }
         else if (!strcmp(operation, "DIV")) {
+            // DIV @résultat @opérande1 @opérande2
             registre[r1] = registre[r3] / registre[r2];
         }
         else if (!strcmp(operation, "COP")) {
+            // COP @résultat @opérande
+            registre[r1] = registre[r2];
 
         }
         else if (!strcmp(operation, "AFC")) {
-
+            // AFC @résultat val_const
+            registre[r1] = r2;
         }
         else if (!strcmp(operation, "JMP")) {
+            // JMP num_inst
+            index_execute = r1 - 1;
 
         }
         else if (!strcmp(operation, "JMF")) {
+            // JMF @cond     num_inst
+            if (registre[r1] == 0) {
+                index_execute = r2 - 1;
+            }
 
         }
         else if (!strcmp(operation, "INF")) {
-
+            // INF @résultat @opérande1 @opérande2
+            if (registre[r3] < registre[r2]) {
+				registre[r1] = 1;
+			} else {
+				registre[r1] = 0;
+			}
         }
         else if (!strcmp(operation, "SUP")) {
-
+            // SUP @résultat @opérand1 @opérand2
+            if (registre[r3] > registre[r2]) {
+				registre[r1] = 1;
+			} else {
+				registre[r1] = 0;
+			}
         }
         else if (!strcmp(operation, "EQU")) {
-
+            // EQU @résultat @opérand1 @opérand2
+            if (registre[r3] == registre[r2]) {
+				registre[r1] = 1;
+			} else {
+				registre[r1] = 0;
+			}
         }
         else if (!strcmp(operation, "PRI")) {
+            // PRI @résultat
+            printf("%d \n", registre[r1]);
 
         }
         index_execute++;
-
-
-
     }
-    
-
 }
-
-// ADD @résultat @opérande1 @opérande2
-// MUL @résultat @opérande1 @opérande2
-// SOU @résultat @opérande1 @opérande2
-// DIV @résultat @opérande1 @opérande2
-// COP @résultat @opérande
-// AFC @résultat val_const
-// JMP num_inst
-// JMF @cond     num_inst
-// INF @résultat @opérande1 @opérande2
-// SUP @résultat @opérand1 @opérand2
-// EQU @résultat @opérand1 @opérand2
-// PRI @résultat
 
 
 void print_instruction(instruction i){
@@ -97,13 +109,19 @@ void print_instruction(instruction i){
 }
 
 void print_all(){
-    for (int i = 0, i <= index_tab, i++){
+    for (int i = 0; i < index_tab; i++){
         printf("%d. ", i);
         print_instruction(tab_instruction[i]);
-        printf("\n");
     }
 }
 
-/*int main(){
-
-}*/
+int main(){
+    printf("index execute : %d \n", index_execute);
+    add_instruction("AFC", 1, 2, -1 );
+    add_instruction("AFC", 2, 4, -1 );
+    add_instruction("ADD", 3, 1, 2 );
+    add_instruction("MUL", 4, 1, 2 );
+    print_all();
+    interpreter();
+    printf("index execute : %d \n", index_execute);
+}

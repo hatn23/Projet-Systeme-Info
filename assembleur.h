@@ -1,19 +1,8 @@
-// ADD @résultat @opérande1 @opérande2
-// MUL @résultat @opérande1 @opérande2
-// SOU @résultat @opérande1 @opérande2
-// DIV @résultat @opérande1 @opérande2
-// COP @résultat @opérande
-// AFC @résultat val_const
-// JMP num_inst
-// JMF @cond     num_inst
-// INF @résultat @opérande1 @opérande2
-// SUP @résultat @opérand1 @opérand2
-// EQU @résultat @opérand1 @opérand2
-// PRI @résultat
+
 #ifndef ASSEMBLEUR_H
 #define ASSEMBLEUR_H
 
-#include "symbol_table.h"
+//#include "symbol_table.h"
 /* 
 #define ADD   1
 #define MUL   2
