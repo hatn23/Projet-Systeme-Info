@@ -63,8 +63,32 @@ Contenus:   Contenu Contenus
 
 Contenu:     Aff 
             |Print
-            |Declaration;
+            |Declaration
+            |IfStatement
+            |While
+            ;
 
+IfStatement:tIF {printf("tIF ");} 
+            tOB Condition tCB {printf("condition ");}
+            tOA {globalDepth++; printf("enter Content \n");} Contenus tCA {globalDepth--;} Else 
+            ;
+
+Else:       tELSE {printf("tELSE ");} tOA {globalDepth++;}  Contenus  {printf("enter Content \n");} tCA {globalDepth--;}
+            |tELSE {printf("tELSE ");} Contenu {printf("only 1 instruction after else\n");}
+            |Vide
+            ;
+
+While:      tWHILE tOB Condition tCB tOA {globalDepth++;}  {printf("enter Content \n");} Contenus tCA {globalDepth--;}
+            |tWHILE  tOB Condition tCB Contenu {printf("only 1 instruction in the loop\n");}
+            ;
+
+Condition:  tVAR tCMP E
+            |tVAR tINF E
+            |tVAR tSUP E
+            |tVAR tINFEQUAL E
+            |tVAR tSUPEQUAL E
+            |E
+            ;
 
 Declaration:Type tVAR 
             {
@@ -102,8 +126,7 @@ Print:      tPRINTF tOB tVAR {printf("printf %s\n", $3); } tCB tSEMCOL
             ;
 
 
-Aff:        tVAR 
-            {printSymbolTable();
+Aff:        tVAR {printSymbolTable();
             printf("traitement d'affectation de %s\n", $1);
             if(findSymbol($1,globalDepth)!=-1){
                 if(isConstant($1,globalDepth)==0){
@@ -127,6 +150,7 @@ E:          tREAL       {
                         printf("meet a int\n");
                         printTmpTable();}
             |tVAR       {int index=findSymbol($1,globalDepth);
+                        printf("tVAR= %s",$1);
                         if(index){
                             if(!isInitialised($1,globalDepth)){
                                 yyerror("non initialised variable");
