@@ -1,6 +1,5 @@
 //#include "symbol_table.h"
 #include "assembleur.h"
-
 #define MAX_TABLESIZE 4000
 
 instruction tab_instruction[MAX_TABLESIZE];
@@ -35,74 +34,91 @@ void interpreter(){
        int r3 = tab_instruction[index_execute].r3;
        if (!strcmp(operation, "ADD")) {
            // ADD @résultat @opérande1 @opérande2
-			registre[r1] = registre[r3] + registre[r2];
+			registre[r1] = registre[r2] + registre[r3];
+            printf("r%d = r%d + r%d = %d + %d = %d\n",r1, r2, r3, registre[r2],registre[r3],registre[r1]);
         } 
         else if (!strcmp(operation, "MUL")) {
             // MUL @résultat @opérande1 @opérande2
-            registre[r1] = registre[r3] * registre[r2];
+            registre[r1] = registre[r2] * registre[r3];
+            printf("r%d = r%d * r%d = %d * %d = %d\n",r1, r2, r3,registre[r2],registre[r3],registre[r1]);
         }
         else if (!strcmp(operation, "SOU")) {
             // SOU @résultat @opérande1 @opérande2
-            registre[r1] = registre[r3] - registre[r2];
+            registre[r1] = registre[r2] - registre[r3];
+            printf("r%d = r%d - r%d = %d - %d = %d\n",r1, r2, r3, registre[r2],registre[r3], registre[r1]);
         }
         else if (!strcmp(operation, "DIV")) {
             // DIV @résultat @opérande1 @opérande2
-            registre[r1] = registre[r3] / registre[r2];
+            registre[r1] = registre[r2] / registre[r3];
+            printf("r%d = r%d / r%d = %d / %d = %d\n",r1, r2, r3,  registre[r2],registre[r3], registre[r1]);
         }
         else if (!strcmp(operation, "COP")) {
             // COP @résultat @opérande
             registre[r1] = registre[r2];
-
         }
         else if (!strcmp(operation, "AFC")) {
             // AFC @résultat val_const
             registre[r1] = r2;
+            printf("r%d = %d\n", r1, registre[r1]);
+
         }
         else if (!strcmp(operation, "JMP")) {
             // JMP num_inst
             index_execute = r1 - 1;
+            printf("Jump to instruction %d\n", r1);
 
         }
         else if (!strcmp(operation, "JMF")) {
             // JMF @cond     num_inst
             if (registre[r1] == 0) {
                 index_execute = r2 - 1;
+                printf("Jump to instruction %d\n", r2);
+
+            }
+            else {
+                printf("Condition is true, don't jump");
             }
 
         }
         else if (!strcmp(operation, "INF")) {
             // INF @résultat @opérande1 @opérande2
-            if (registre[r3] < registre[r2]) {
+            printf("r%d = %d, r%d = %d", r2, registre[r2], r3, registre[r3]);
+            if (registre[r2] < registre[r3]) {
 				registre[r1] = 1;
+                printf("r%d < r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			} else {
 				registre[r1] = 0;
+                printf("r%d >= r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			}
         }
         else if (!strcmp(operation, "SUP")) {
             // SUP @résultat @opérand1 @opérand2
-            if (registre[r3] > registre[r2]) {
-				registre[r1] = 1;
+            printf("r%d = %d, r%d = %d", r2, registre[r2], r3, registre[r3]);
+            if (registre[r2] > registre[r3]) {
+            printf("r%d > r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			} else {
 				registre[r1] = 0;
+                printf("r%d <= r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			}
         }
         else if (!strcmp(operation, "EQU")) {
             // EQU @résultat @opérand1 @opérand2
+             printf("r%d = %d, r%d = %d", r2, registre[r2], r3, registre[r3]);
             if (registre[r3] == registre[r2]) {
 				registre[r1] = 1;
+                printf("r%d = r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			} else {
 				registre[r1] = 0;
+                printf("r%d /= r%d, r%d = %d\n", r2,r3,r1, registre[r1]);
 			}
         }
         else if (!strcmp(operation, "PRI")) {
             // PRI @résultat
             printf("%d \n", registre[r1]);
-
         }
         index_execute++;
     }
 }
-
 
 void print_instruction(instruction i){
     printf("Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", i.operation, i.r1, i.r2, i.r3);
