@@ -33,6 +33,7 @@ int get_index_execute();
 void interpreter();
 void print_instruction(instruction i);
 void print_all();
+void patch(int from, int to);
 
 #endif
 

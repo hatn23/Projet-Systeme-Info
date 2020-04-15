@@ -6,6 +6,7 @@ instruction tab_instruction[MAX_TABLESIZE];
 int index_tab = 0;
 int index_execute = 0;
 int registre[15];
+int memory[1024];
 
 void add_instruction(char *operation,int r1, int r2, int r3){
     struct instruction add;
@@ -116,6 +117,15 @@ void interpreter(){
             // PRI @résultat
             printf("%d \n", registre[r1]);
         }
+        else if (!strcmp(operation,"LOAD")){
+            registre[r1] = memory[r2];
+			printf("r%d is load to r%d from @%d\n", r1, memory[r2], r2);
+        }
+        else if (!strcmp(operation,"STORE")){
+            memory[r1] = registre[r2];
+			printf("r%d stores %d at @%d\n", r2, memory[r1], r1);
+
+        }
         index_execute++;
     }
 }
@@ -131,7 +141,11 @@ void print_all(){
     }
 }
 
-int main(){
+void patch(int from, int to){
+    tab_instruction[from].r1 = to;
+}
+
+/*int main(){
     printf("index execute : %d \n", index_execute);
     add_instruction("AFC", 1, 2, -1 );
     add_instruction("AFC", 2, 4, -1 );
@@ -140,4 +154,4 @@ int main(){
     print_all();
     interpreter();
     printf("index execute : %d \n", index_execute);
-}
+}*/
