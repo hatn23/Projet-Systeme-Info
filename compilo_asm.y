@@ -162,7 +162,9 @@ Aff:        tVAR {printSymbolTable();
             }else{
                 yyerror("Variable is never declared");
             }
-            }tEQUAL E tSEMCOL 
+            }tEQUAL E tSEMCOL {
+                   add_instruction("ADD", findSymbol($1,globalDepth), $3, -1);
+            }
             ;
 
 E:          tREAL       {
