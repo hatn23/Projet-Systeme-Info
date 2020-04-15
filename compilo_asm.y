@@ -3,7 +3,7 @@
     #include <stdlib.h>
     #include <math.h>
     #include "symbol_table.h"
-    //#include "assembleur.h"
+    #include "assembleur.h"
 
     int yylex(void);
     int yydebug = 1;
@@ -29,7 +29,8 @@
 %token  tOB tCB tOA tCA
 %token  tINT tCHAR tVOID tERROR tFLOAT
 %token  tSEMCOL tSEP
-%token  tMain tRET tWHILE tIF tELSE tCONST tPRINTF
+%token  tMain tRET tCONST tPRINTF
+%token<number> tIF tWHILE tELSE
 %token  tCMP tINF tSUP tINFEQUAL tSUPEQUAL tNOTEQUAL
 
 %left tSEP 
@@ -68,17 +69,40 @@ Contenu:     Aff
             |While
             ;
 
-IfStatement:tIF {printf("tIF "); printf("JMF @tmp \n");} 
-            tOB Condition tCB {printf("condition ");}
-            tOA {globalDepth++; printf("enter Content \n");} Contenus tCA {globalDepth--;} Else 
+IfStatement:tIF tOB Condition tCB {
+                int line = get_index_tab();
+                add_instruction("JMPF",line,-1,-1);
+                $1=line;
+                }
+            tOA {globalDepth++;} Contenus{
+                int current = get_index_tab();
+                patch($1,current+2);
+                add_instruction("JMP",current ,-1,-1);
+                $1= current++;
+            }
+             tCA {globalDepth--;} Else 
             ;
 
-Else:       tELSE {printf("tELSE ");} tOA {globalDepth++;}  Contenus  {printf("enter Content of else \n");} tCA {globalDepth--;}
-            |tELSE {printf("tELSE ");} Contenu {printf("only 1 instruction after else\n");}
+Else:       tELSE tOA {globalDepth++;}  Contenus  {
+                int current = get_index_tab();
+                patch($1,current+1);
+            } 
+            tCA {globalDepth--;}
+            |tELSE Contenu {
+                int current = get_index_tab();
+                patch($1,current+1);
+            } 
             |Vide
             ;
 
-While:      tWHILE tOB Condition tCB tOA {globalDepth++;}  {printf("enter loop \n");} Contenus tCA {globalDepth--;}
+While:      tWHILE tOB Condition tCB tOA {
+                globalDepth++; 
+                int line = get_index_tab();
+                $1= line;
+            }
+            Contenus{
+                add_instruction("JMP",$1,-1,-1);
+            } tCA {globalDepth--;}
             |tWHILE  tOB Condition tCB Contenu {printf("only 1 instruction in the loop\n");}
             ;
 
