@@ -43,3 +43,6 @@ void printSymbolTable();
 
 void printTmpTable();
 
+//return sommet de la pile
+int get_last();
+

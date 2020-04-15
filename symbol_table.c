@@ -136,6 +136,10 @@ void printTmpTable(){
 	printf("-------------------------\n");
 }
 
+int get_last(){
+	return currentPosition;
+}
+
 // int main()
 // {
 // 	pushSymbol( "test", 1,0);
