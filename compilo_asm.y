@@ -30,7 +30,7 @@
 %token  tINT tCHAR tVOID tERROR tFLOAT
 %token  tSEMCOL tSEP
 %token  tMain tRET tWHILE tIF tELSE tCONST tPRINTF
-%token  tCMP tINF tSUP tINFEQUAL tSUPEQUAL
+%token  tCMP tINF tSUP tINFEQUAL tSUPEQUAL tNOTEQUAL
 
 %left tSEP 
 %right tEQUAL tADD tSUB tMUL tDIV 
@@ -68,17 +68,17 @@ Contenu:     Aff
             |While
             ;
 
-IfStatement:tIF {printf("tIF ");} 
+IfStatement:tIF {printf("tIF "); printf("JMF @tmp \n");} 
             tOB Condition tCB {printf("condition ");}
             tOA {globalDepth++; printf("enter Content \n");} Contenus tCA {globalDepth--;} Else 
             ;
 
-Else:       tELSE {printf("tELSE ");} tOA {globalDepth++;}  Contenus  {printf("enter Content \n");} tCA {globalDepth--;}
+Else:       tELSE {printf("tELSE ");} tOA {globalDepth++;}  Contenus  {printf("enter Content of else \n");} tCA {globalDepth--;}
             |tELSE {printf("tELSE ");} Contenu {printf("only 1 instruction after else\n");}
             |Vide
             ;
 
-While:      tWHILE tOB Condition tCB tOA {globalDepth++;}  {printf("enter Content \n");} Contenus tCA {globalDepth--;}
+While:      tWHILE tOB Condition tCB tOA {globalDepth++;}  {printf("enter loop \n");} Contenus tCA {globalDepth--;}
             |tWHILE  tOB Condition tCB Contenu {printf("only 1 instruction in the loop\n");}
             ;
 
@@ -87,6 +87,7 @@ Condition:  tVAR tCMP E
             |tVAR tSUP E
             |tVAR tINFEQUAL E
             |tVAR tSUPEQUAL E
+            |tVAR tNOTEQUAL E
             |E
             ;
 
@@ -121,8 +122,7 @@ MultipleDeclaration: tSEP tVAR{
 AffectationDuringDeclaration: tEQUAL E{ printf("affection a faire en ASM\n"); }
                               |Vide;
 
-Print:      tPRINTF tOB tVAR {printf("printf %s\n", $3); } tCB tSEMCOL 
-            
+Print:      tPRINTF tOB tVAR {printf("printf %s\n", $3); } tCB tSEMCOL
             ;
 
 

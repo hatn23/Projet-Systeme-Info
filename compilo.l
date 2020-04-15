@@ -43,6 +43,7 @@ ALPHANUM    {ALPHABET}({ALPHABET}|{NUMBER}|"_")*?
 ">"         {return (tSUP);}
 "<="        {return (tINFEQUAL);}
 ">="        {return (tSUPEQUAL);}
+"!="        {return (tNOTEQUAL);}
 "printf"    {return(tPRINTF);}
 
 {NUMBER}    {yylval.number=atoi(yytext);

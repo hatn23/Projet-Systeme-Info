@@ -13,4 +13,9 @@ if (i==10){
 }else {
     k=5;
     }
+while(1){
+    printf(f);
 }
+
+}
+
