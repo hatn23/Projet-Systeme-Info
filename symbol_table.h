@@ -22,9 +22,8 @@ int popTmp();
 //return the last symbol read by the parser
 symbol getLastSymbol();
 
-//return address of the temporary variable if the variable is found in the table
-//else return -1
-int getaddrtmp(char* name);
+//return address of the temporary variable
+int getaddrtmp();
 
 //return 1 if the symbol is initialised
 //else return 0

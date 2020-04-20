@@ -74,12 +74,8 @@ symbol getLastSymbol(){
 
 //return address of the temporary variable if the variable is found in the table
 //else return -1
-int getaddrtmp(char* name){
-	for(int i=0;i<=stackpointer;i++){
-		if(!strcmp(symbolTable[i]->name, name))
-            return TABLESIZE+i; //le table de variable temporaire se trouve juste apres le table de symbol
-	}
-	return -1;
+int getaddrtmp(){
+	return TABLESIZE+stackpointer;
 }
 
 //return 1 if the symbol is initialised
