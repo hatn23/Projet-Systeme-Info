@@ -182,7 +182,7 @@ E:          tREAL       {
                         printTmpTable();
                         add_instruction("STORE", getaddrtmp(),ind,-1);
                         add_instruction("AFC", ind, $1, -1);}
-            |tVAR       {int ind=findSymbol($1,globalDepth);
+            |tVAR       {int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
                         if(index){
                             if(!isInitialised($1,globalDepth)){
