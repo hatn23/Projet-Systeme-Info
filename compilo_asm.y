@@ -5,6 +5,8 @@
     #include "symbol_table.h"
     #include "assembleur.h"
 
+    int ind = 0;
+
     int yylex(void);
     int yydebug = 1;
 
@@ -171,16 +173,16 @@ E:          tREAL       {
                         pushTmp();
                         printf("meet a float\n");
                         printTmpTable();
-                        add_instruction("STORE", getaddrtmp(),index,-1);
-                        add_instruction("AFC", index, $1, -1);}
+                        add_instruction("STORE", getaddrtmp(),ind,-1);
+                        add_instruction("AFC", ind, $1, -1);}
                         
             |tNUMBER    {
                         pushTmp();
                         printf("meet a int\n");
                         printTmpTable();
-                        add_instruction("STORE", getaddrtmp(),index,-1);
-                        add_instruction("AFC", index, $1, -1);}
-            |tVAR       {int index=findSymbol($1,globalDepth);
+                        add_instruction("STORE", getaddrtmp(),ind,-1);
+                        add_instruction("AFC", ind, $1, -1);}
+            |tVAR       {int ind=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
                         if(index){
                             if(!isInitialised($1,globalDepth)){
@@ -191,63 +193,63 @@ E:          tREAL       {
                         }
             |E tADD E 
             {
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
-                index++;
+                ind++;
 
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
 
-                add_instruction("ADD",(index -1), (index -1), index );
-                index--;
+                add_instruction("ADD",(ind -1), (ind -1), ind );
+                ind--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp(),index,-1)
+                add_instruction("STORE",getaddrtmp(),ind,-1);
             }
             |E tSUB E 
             {
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
-                index++;
+                ind++;
 
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
 
-                add_instruction("SUB",(index -1), (index -1), index );
-                index--;
+                add_instruction("SUB",(ind -1), (ind -1), ind );
+                ind--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp(),index,-1)
+                add_instruction("STORE",getaddrtmp(),ind,-1);
             }
             |E tMUL E 
             {
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
-                index++;
+                ind++;
 
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
 
-                add_instruction("MUL",(index -1), (index -1), index );
-                index--;
+                add_instruction("MUL",(ind -1), (ind -1), ind );
+                ind--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp(),index,-1)
+                add_instruction("STORE",getaddrtmp(),ind,-1);
             }
             |E tDIV E 
             {
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
-                index++;
+                ind++;
 
-                add_instruction("LOAD",index, get_last(), -1 );
+                add_instruction("LOAD",ind, get_last(), -1 );
                 popTmp();
 
-                add_instruction("DIV",(index -1), (index -1), index );
-                index--;
+                add_instruction("DIV",(ind -1), (ind -1), ind );
+                ind--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp(),index,-1)
+                add_instruction("STORE",getaddrtmp(),ind,-1);
             }
             ;      
 
