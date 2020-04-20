@@ -163,18 +163,23 @@ Aff:        tVAR {printSymbolTable();
                 yyerror("Variable is never declared");
             }
             }tEQUAL E tSEMCOL {
-                   add_instruction("ADD", findSymbol($1,globalDepth), $3, -1);
+                   //add_instruction("AFC", findSymbol($1,globalDepth), $3, -1);
             }
             ;
 
 E:          tREAL       {
                         pushTmp();
                         printf("meet a float\n");
-                        printTmpTable();}
+                        printTmpTable();
+                        add_instruction("STORE", getaddrtmp,index,-1);
+                        add_instruction("AFC", index, $1, -1);}
+                        
             |tNUMBER    {
                         pushTmp();
                         printf("meet a int\n");
-                        printTmpTable();}
+                        printTmpTable();
+                        add_instruction("STORE", getaddrtmp,index,-1);
+                        add_instruction("AFC", index, $1, -1);}
             |tVAR       {int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
                         if(index){
