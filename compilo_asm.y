@@ -163,31 +163,22 @@ Aff:        tVAR {printSymbolTable();
                 yyerror("Variable is never declared");
             }
             }tEQUAL E tSEMCOL {
-<<<<<<< HEAD
                 add_instruction("AFC", findSymbol($1,globalDepth),popTmp(), -1);
-=======
-                   //add_instruction("AFC", findSymbol($1,globalDepth), $3, -1);
->>>>>>> 848529c43e7377d3df2a433e96c40a402c383523
             }
             ;
 
 E:          tREAL       {
                         pushTmp();
                         printf("meet a float\n");
-<<<<<<< HEAD
-                        add_instruction("AFC", findSymbol($1,globalDepth),popTmp(), -1);
-                        printTmpTable();}
-=======
                         printTmpTable();
-                        add_instruction("STORE", getaddrtmp,index,-1);
+                        add_instruction("STORE", getaddrtmp(),index,-1);
                         add_instruction("AFC", index, $1, -1);}
                         
->>>>>>> 848529c43e7377d3df2a433e96c40a402c383523
             |tNUMBER    {
                         pushTmp();
                         printf("meet a int\n");
                         printTmpTable();
-                        add_instruction("STORE", getaddrtmp,index,-1);
+                        add_instruction("STORE", getaddrtmp(),index,-1);
                         add_instruction("AFC", index, $1, -1);}
             |tVAR       {int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
@@ -211,7 +202,7 @@ E:          tREAL       {
                 index--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp,index,-1)
+                add_instruction("STORE",getaddrtmp(),index,-1)
             }
             |E tSUB E 
             {
@@ -226,7 +217,7 @@ E:          tREAL       {
                 index--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp,index,-1)
+                add_instruction("STORE",getaddrtmp(),index,-1)
             }
             |E tMUL E 
             {
@@ -241,7 +232,7 @@ E:          tREAL       {
                 index--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp,index,-1)
+                add_instruction("STORE",getaddrtmp(),index,-1)
             }
             |E tDIV E 
             {
@@ -256,7 +247,7 @@ E:          tREAL       {
                 index--;
 
                 pushTmp();
-                add_instruction("STORE",getaddrtmp,index,-1)
+                add_instruction("STORE",getaddrtmp(),index,-1)
             }
             ;      
 
