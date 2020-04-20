@@ -1,9 +1,9 @@
 %{
     #include <stdlib.h>
-    #include "compilo.h"
+    #include "y.tab.h"
 %}
 
-
+SPACE       [" "]+
 TAB         [\t]+
 NEWLINE     [\n]+
 DIGIT       [0-9]
@@ -11,33 +11,31 @@ NUMBER      {DIGIT}+
 EXP         [eE][+-]?{NUMBER}
 REAL        {NUMBER}("."{NUMBER})?{EXP}?
 ALPHABET    [A-Za-z]
-ALPHANUM    {ALPHABET}({ALPHABET}|{NUM}|"_")*?
+ALPHANUM    {ALPHABET}({ALPHABET}|{NUMBER}|"_")*?
 
 %%
+{SPACE}     {}
+{TAB}       {}
+{NEWLINE}   {}
 "main"      {return (tMain);}
+"{"         {return (tOA);}
+"}"         {return (tCA);}
+"("         {return (tOB);}
+")"         {return (tCB);}
 "int"       {return (tINT);}
 "const"     {return (tCONST);}
 "char"      {return (tCHAR);}
 "float"     {return (tFLOAT);}
-"void"     {return (tVOID);}
-"printf"    {return(tPRINTF);}
-{TAB}       {}
-{NEWLINE}   {}
-{NUMBER}    {yylval=atoi(yytext);
-             return (tNUMBER);}
-{REAL}      {yylval=atof(yytext);
-             return (tREAL);}  
-"if"        {return (tIF);}
-"else"      {return (tELSE);}
-"while"     {return (tWHILE);}
-"return"    {return (tRET);}
+"void"      {return (tVOID);}
 "+"         {return (tADD);}
 "-"         {return (tSUB);}
 "*"         {return (tMUL);}
 "/"         {return (tDIV);}
 "="         {return (tEQUAL);}
-"("         {return (tOB);}
-")"         {return (tCB);}
+"if"        {return (tIF);}
+"else"      {return (tELSE);}
+"while"     {return (tWHILE);}
+"return"    {return (tRET);}
 "=="        {return (tCMP);}
 ","         {return (tSEP);}
 ";"         {return (tSEMCOL);}
@@ -45,6 +43,17 @@ ALPHANUM    {ALPHABET}({ALPHABET}|{NUM}|"_")*?
 ">"         {return (tSUP);}
 "<="        {return (tINFEQUAL);}
 ">="        {return (tSUPEQUAL);}
+"!="        {return (tNOTEQUAL);}
+"printf"    {return(tPRINTF);}
+
+{NUMBER}    {yylval.number=atoi(yytext);
+             return (tNUMBER);}
+{REAL}      {yylval.reel=atof(yytext);
+             return (tREAL);} 
+{ALPHANUM}  {yylval.str=yytext;
+             return (tVAR);}
+
+
 .           {return (tERROR);}
 
 %%
@@ -52,7 +61,4 @@ int yywrap(void){
     return 1;
 }
 
-int main(void){
-    yylex();
-}
 
