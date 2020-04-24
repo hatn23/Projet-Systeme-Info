@@ -14,7 +14,38 @@
       extern int yylineno;
       fprintf (stderr, "ERROR (%d): %s\n", yylineno, s);
   }
-
+    void exec_condition(char * condition){
+        int first = get_last()-1;
+        int second=get_last();
+        int newAddr;
+        if(strcmp(condition,"==")==0) {
+            add_instruction("EQU",first ,first,second); 
+        }
+        else if(strcmp(condition,"!=")==0){
+            newAddr= pushTmp();
+            add_instruction("INF",newAddr ,first,second); 
+            add_instruction("SUP",first ,first,second); 
+            add_instruction("ADD",first ,first,newAddr); 
+        }
+        else if(strcmp(condition,">=")==0){
+            newAddr= pushTmp();
+            add_instruction("EQU",newAddr ,first,second); 
+            add_instruction("SUP",first ,first,second); 
+            add_instruction("ADD",first ,first,newAddr); 
+        }
+        else if(strcmp(condition,"<=")==0){
+            newAddr= pushTmp();
+            add_instruction("INF",newAddr ,first,second); 
+            add_instruction("EQU",first ,first,second); 
+            add_instruction("ADD",first ,first,newAddr); 
+        }
+        else if(strcmp(condition,">")==0){
+            add_instruction("SUP",first ,first,second); 
+        }
+        else if(strcmp(condition,"<")==0){
+            add_instruction("INF",first ,first,second); 
+        }
+    }
     int globalDepth =0 ;
 %}
 
@@ -71,27 +102,31 @@ Contenu:     Aff
             |While
             ;
 
-IfStatement:tIF tOB Condition tCB {
+IfStatement:tIF{printf("if starts here \n");} tOB Condition{
                 int line = get_index_tab();
+                printf("current=%d\n", line);
                 add_instruction("JMPF",line,-1,-1);
                 $1=line;
                 }
-            tOA {globalDepth++;} Contenus{
+             tCB tOA {globalDepth++;} Contenus{
                 int current = get_index_tab();
-                patch($1,current+2);
+                patch($1,current+2); 
+                printf("patch=%d +2\n", current);
                 add_instruction("JMP",current ,-1,-1);
                 $1= current++;
             }
-             tCA {globalDepth--;} Else 
+             tCA {globalDepth--;} Else {printf("if end here\n");} 
             ;
 
-Else:       tELSE tOA {globalDepth++;}  Contenus  {
+Else:       tELSE{printf("else here\n");} tOA {globalDepth++;}  Contenus  {
                 int current = get_index_tab();
                 patch($1,current+1);
+                printf("patch=%d +1\n", current);
             } 
             tCA {globalDepth--;}
             |tELSE Contenu {
                 int current = get_index_tab();
+                printf("patch=%d +1\n", current);
                 patch($1,current+1);
             } 
             |Vide
@@ -108,13 +143,13 @@ While:      tWHILE tOB Condition tCB tOA {
             |tWHILE  tOB Condition tCB Contenu {printf("only 1 instruction in the loop\n");}
             ;
 
-Condition:  tVAR tCMP E
-            |tVAR tINF E
-            |tVAR tSUP E
-            |tVAR tINFEQUAL E
-            |tVAR tSUPEQUAL E
-            |tVAR tNOTEQUAL E
-            |E
+Condition:  tVAR tCMP E {exec_condition("==");}
+            |tVAR tINF E {exec_condition("<");}
+            |tVAR tSUP E {exec_condition(">");}
+            |tVAR tINFEQUAL E {exec_condition("<=");}
+            |tVAR tSUPEQUAL E {exec_condition(">=");}
+            |tVAR tNOTEQUAL E {exec_condition("!=");}
+            |E 
             ;
 
 Declaration:Type tVAR 
@@ -182,7 +217,8 @@ E:          tREAL       {
                         printTmpTable();
                         add_instruction("STORE", getaddrtmp(),ind,-1);
                         add_instruction("AFC", ind, $1, -1);}
-            |tVAR       {int index=findSymbol($1,globalDepth);
+            |tVAR       {
+                        int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
                         if(index){
                             if(!isInitialised($1,globalDepth)){
