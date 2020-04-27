@@ -131,14 +131,18 @@ void interpreter(){
 }
 
 void print_instruction(instruction i){
-    printf("Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", i.operation, i.r1, i.r2, i.r3);
+    //fprintf(file,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", i.operation, i.r1, i.r2, i.r3);
+    NULL;
 }
 
 void print_all(){
+    FILE * file_asm = fopen("asm.txt","w+");
     for (int i = 0; i < index_tab; i++){
-        printf("%d. ", i);
-        print_instruction(tab_instruction[i]);
+        fprintf(file_asm,"%d. ", i);
+        //print_instruction(tab_instruction[i]);
+        fprintf(file_asm,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", tab_instruction[i].operation, tab_instruction[i].r1, tab_instruction[i].r2, tab_instruction[i].r3);
     }
+    fclose(file_asm);
 }
 
 void patch(int from, int to){

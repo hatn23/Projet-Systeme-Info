@@ -6,6 +6,7 @@
     #include "assembleur.h"
 
     int ind = 0;
+    int tmp = 0;
 
     int yylex(void);
     int yydebug = 1;
@@ -205,18 +206,35 @@ Aff:        tVAR {printSymbolTable();
             ;
 
 E:          tREAL       {
-                        pushTmp();
+                        //pushTmp();
                         printf("meet a float\n");
-                        printTmpTable();
-                        add_instruction("STORE", getaddrtmp(),ind,-1);
-                        add_instruction("AFC", ind, $1, -1);}
+                       // printTmpTable();
+                        printf("tmp = %d\n", tmp);
+			            char name[4] = "tmp";
+			            char tmp_ind[4];
+                        snprintf(tmp_ind, 10, "%d", tmp);
+                        strcat(name,tmp_ind);
+                        tmp++;
+                        pushSymbol(name,0,globalDepth);
+                        add_instruction("AFC", ind, $1, -1);
+                        add_instruction("STORE", findSymbol(name,globalDepth),ind,-1);
+                        }
                         
             |tNUMBER    {
-                        pushTmp();
+                        //pushTmp();
                         printf("meet a int\n");
-                        printTmpTable();
-                        add_instruction("STORE", getaddrtmp(),ind,-1);
-                        add_instruction("AFC", ind, $1, -1);}
+                        //printTmpTable();
+                        printf("tmp = %d\n", tmp);
+			            char name[4] = "tmp";
+			            char tmp_ind[4];
+                        snprintf(tmp_ind, 10, "%d", tmp);
+                        strcat(name,tmp_ind);
+                        tmp++;
+                        pushSymbol(name,0,globalDepth);
+                        add_instruction("AFC", ind, $1, -1);
+                        add_instruction("STORE", findSymbol(name,globalDepth),ind,-1);
+                        }
+                        
             |tVAR       {
                         int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
@@ -230,67 +248,115 @@ E:          tREAL       {
             |E tADD E 
             {
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
                 ind++;
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                popSymbol();
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("ADD",(ind -1), (ind -1), ind );
                 ind--;
 
-                pushTmp();
-                add_instruction("STORE",getaddrtmp(),ind,-1);
+                char name[4]="tmp";
+                char tmp_ind[4];
+                snprintf(tmp_ind, 10, "%d", tmp);
+                strcat(name,tmp_ind);
+                tmp++;
+                //pushTmp();
+                pushSymbol(name,0,globalDepth);
+                add_instruction("STORE",findSymbol(name,globalDepth),ind,-1);
             }
             |E tSUB E 
             {
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
                 ind++;
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("SUB",(ind -1), (ind -1), ind );
                 ind--;
 
-                pushTmp();
-                add_instruction("STORE",getaddrtmp(),ind,-1);
+                char name[4]="tmp";
+                char tmp_ind[4];
+                snprintf(tmp_ind, 10, "%d", tmp);
+                strcat(name,tmp_ind);
+                tmp++;
+                //pushTmp();
+                pushSymbol(name,0,globalDepth);
+                add_instruction("STORE",findSymbol(name,globalDepth),ind,-1);
             }
             |E tMUL E 
             {
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
                 ind++;
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("MUL",(ind -1), (ind -1), ind );
                 ind--;
 
-                pushTmp();
-                add_instruction("STORE",getaddrtmp(),ind,-1);
+                char name[4]="tmp";
+                char tmp_ind[4];
+                snprintf(tmp_ind, 10, "%d", tmp);
+                strcat(name,tmp_ind);
+                tmp++;
+                //pushTmp();
+                pushSymbol(name,0,globalDepth);
+                add_instruction("STORE",findSymbol(name,globalDepth),ind,-1);
             }
             |E tDIV E 
             {
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
                 ind++;
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("LOAD",ind, get_last(), -1 );
-                popTmp();
+                //popTmp();
+                popSymbol();
+                printf("tmp = %d\n", tmp);
+                tmp--;
 
                 add_instruction("DIV",(ind -1), (ind -1), ind );
                 ind--;
 
-                pushTmp();
-                add_instruction("STORE",getaddrtmp(),ind,-1);
+                char name[4]="tmp";
+                char tmp_ind[4];
+                snprintf(tmp_ind, 10, "%d", tmp);
+                strcat(name,tmp_ind);
+                tmp++;
+                //pushTmp();
+                pushSymbol(name,0,globalDepth);
+                add_instruction("STORE",findSymbol(name,globalDepth),ind,-1);
             }
             ;      
 
 %%
 int main(void){
     yyparse();
+    print_all();
     return 0;
 }
