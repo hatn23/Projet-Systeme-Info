@@ -36,11 +36,13 @@ entity ALU is
     Port ( A : in  STD_LOGIC_VECTOR (7 downto 0);
            B : in  STD_LOGIC_VECTOR (7 downto 0);
            CTRL_ALU : in  STD_LOGIC_VECTOR (2 downto 0);
-           N : out  STD_LOGIC;
-           O : out  STD_LOGIC;
-           Z : out  STD_LOGIC;
-           C : out  STD_LOGIC;
+           N : out  STD_LOGIC;	--negative
+           O : out  STD_LOGIC;	--overflow?
+           Z : out  STD_LOGIC;	--zero
+           C : out  STD_LOGIC;	--carry
            S : out  STD_LOGIC_VECTOR (7 downto 0));
+			  -- un FLAG = O&Z&N&C? (out std....)
+			
 end ALU;
 
 architecture Behavioral of ALU is
@@ -52,19 +54,20 @@ begin
 	case(CTRL_ALU)is
 	when "000"=> -- Addition
 		resultat_tmp<= (b"0"&A)+(b"0"&B);
-		ALU_Resultat<= resultat_tmp(7 downto 0);
-		C<= reultat_tmp(8);
-		if(A(7)=0 and B(7)=0) then
-			C<= "1";
-		else
-			C<="0";	
-		end if;
+		-- ALU_Resultat<= resultat_tmp(7 downto 0);
+		--C<= reultat_tmp(8);
+--		if(A(7)=0 and B(7)=0) then
+--			C<= "1";
+--		else
+--			C<="0";	
+--		end if;
 	when "001"=> -- Substraction
-		ALU_Resultat<= A-B;
+		resultat_tmp<= A-B;
+		-- (b"0"&A)+(b"0"&B); ?
 	when "010"=> -- Multiplication
-		ALU_Resultat<= std_logic_vector(to_unsigned(to_integer(unsigned(A))*(to_integer(unsigned(B)))));
+		resultat_tmp<= std_logic_vector(to_unsigned(to_integer(unsigned(A))*(to_integer(unsigned(B)))));
 	when "100"=> -- Division
-		ALU_Resultat<= std_logic_vector(to_unsigned(to_integer(unsigned(A))/(to_integer(unsigned(B)))));
+		resultat_tmp<= std_logic_vector(to_unsigned(to_integer(unsigned(A))/(to_integer(unsigned(B)))));
 	end case;
 	
 	--flag zero (Z)
@@ -73,12 +76,27 @@ begin
 		else
 			Z<="0";
 	end if;
+	
 	--flag negative (N)
-	if (resultat_tmp(7)="1") then
-			Z<="1";
-		else
-			Z<="0";
+	N <= resultat_tmp(7);
+	--	if (resultat_tmp(7)="1") then
+	--			Z<="1";
+	--		else
+	--			Z<="0";
+	--	end if;
+	
+	-- Carry out C
+	C <= resultat_tmp(8);
+	
+	--Overflow O
+	if ((resultat_tmp(7)=1 and A(7)=0 and B(7)=0) or resultat_tmp(7) = '0' and A(7)='1' and B(7)='1&)) then
+		O <= "1";
+	else
+		O <= "0";
 	end if;
+	
+	ALU_Resultat<= resultat_tmp(7 downto 0);
+	
 	end process;
 	
 	S <= ALU_Resultat;
