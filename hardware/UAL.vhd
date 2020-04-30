@@ -34,15 +34,21 @@ end ALU;
 
 architecture Behavioral of ALU is
 	signal ALU_Resultat : std_logic_vector (7 downto 0);
-
+	signal radd : std_logic_vector (8 downto 0);
+	signal rsub : std_logic_vector (8 downto 0);
+	signal rmul : std_logic_vector (15 downto 0);
+	signal Stmp : std_logic_vector (7 downto 0);
 begin
-	radd <= (b"0"&A) + (b"0"&B);
-	rsub <= (b"0"&A) - (b"0"&B);	rmul <= A * B;
-	Stmp <= 	radd (7 downto 0) when CTRL_ALU = "000" else
-				rsub (7 downto 0) when CTRL_ALU = "001" else				rmul( 7 downto 0) when CTRL_ALU = "010" else
-				(others => "00000000");	C <= radd(8);	O <= 1 when rmul(15 downto 8) != x"00" else 0; 
-	Z <= 1 when Stmp(7 downto 0) = "00000000" else 0;
+	radd <= ("0"&A) + ("0"&B);
+	rsub <= ("0"&A) - ("0"&B);
+	rmul <= A * B;
+	Stmp <= 	radd (7 downto 0) when CTRL_ALU="000" else
+				rsub (7 downto 0) when CTRL_ALU="001" else
+				rmul (7 downto 0) when CTRL_ALU="010" else
+				x"00";
+	C <= radd(8);
+	O <= '0' when rmul(15 downto 8) = "00000000" else '1';
+	Z <= '1' when Stmp(7 downto 0) = "00000000" else '0';
 	N <= Stmp(7);
 	S <= Stmp;
-	
 end Behavioral;
