@@ -33,62 +33,16 @@ entity ALU is
 end ALU;
 
 architecture Behavioral of ALU is
-signal ALU_Resultat : std_logic_vector (7 downto 0);
+	signal ALU_Resultat : std_logic_vector (7 downto 0);
 
 begin
-	process(A,B,CTRL_ALU)
-	variable resultat_tmp: std_logic_vector (8 downto 0) := "000000000";
-	begin 
-	O<='0';
-	C<='0';
-	case(CTRL_ALU)is
-	when "000"=> -- Addition
-		resultat_tmp:= (b"0"&A) + (b"0"&B);
-		ALU_Resultat<= resultat_tmp(7 downto 0);
-		C<= resultat_tmp(8);
-		
-		if(A(7)='0' and B(7)='0' and ALU_Resultat(7)='1') then
-			O<= '1';				
-		end if;
-		
-		if(A(7)='1' and B(7)='1' and ALU_Resultat(7)='0') then
-			O<= '1';				
-		end if;
-		
-	when "001"=> -- Substraction
-		resultat_tmp := (b"0"&A) - (b"0"&B);
-		ALU_Resultat<= resultat_tmp(7 downto 0);
-		
-		C<= resultat_tmp(8);
-		
-		if(A(7)='0' and B(7)='1' and ALU_Resultat(7)='1') then
-			O<= '1';				
-		end if;
-		
-		if(A(7)='1' and B(7)='0' and ALU_Resultat(7)='0') then
-			O<= '1';				
-		end if;
-		
-	when "010"=> -- Multiplication
-		ALU_Resultat<= std_logic_vector(to_unsigned((to_integer(unsigned(A)) * to_integer(unsigned(B))),8)) ;
-		
-	when "011"=> -- Division
-		ALU_Resultat<= std_logic_vector(to_unsigned((to_integer(unsigned(A)) / to_integer(unsigned(B))),8)) ;
-		
-	when others => ALU_Resultat <= "00000000" ;
+	radd <= (b"0"&A) + (b"0"&B);
+	rsub <= (b"0"&A) - (b"0"&B);	rmul <= A * B;
+	Stmp <= 	radd (7 downto 0) when CTRL_ALU = "000" else
+				rsub (7 downto 0) when CTRL_ALU = "001" else				rmul( 7 downto 0) when CTRL_ALU = "010" else
+				(others => "00000000");	C <= radd(8);	O <= 1 when rmul(15 downto 8) != x"00" else 0; 
+	Z <= 1 when Stmp(7 downto 0) = "00000000" else 0;
+	N <= Stmp(7);
+	S <= Stmp;
 	
-	end case;
-	
-	--flag zero (Z)
-	if (resultat_tmp(7 downto 0)="00000000") then
-			Z<='1';
-		else
-			Z<='0';
-	end if;
-	
-	--flag negative (N)
-	N <= resultat_tmp(7);
-	end process;
-	
-	S <= ALU_Resultat;
 end Behavioral;
