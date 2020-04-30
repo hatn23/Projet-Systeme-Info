@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "secureip" -o "/home/ise/PSI/Test_ALU_isim_beh.exe" -prj "/home/ise/PSI/Test_ALU_beh.prj" "work.Test_ALU" 
