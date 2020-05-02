@@ -4,7 +4,7 @@
 -- 
 -- Create Date:    06:48:10 04/30/2020 
 -- Design Name: 
--- Module Name:    BandDeRegistre - Behavioral 
+-- Module Name:    BandRegistre - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -43,26 +43,22 @@ entity BandDeRegistre is
 end BandDeRegistre;
 
 architecture Behavioral of BandDeRegistre is
-signal AUX_A : STD_LOGIC_VECTOR (7 downto 0);
-signal AUX_B : STD_LOGIC_VECTOR (7 downto 0);
+type table is array (0 to 15) of STD_LOGIC_VECTOR(7 downto 0);
+signal BR: table ;
 begin
-process
-begin
-	--synchrone
-	wait until CLK'event and CLK='1';
-		if(RST='0') then 
-			AUX_A<=x"00";
-			AUX_B<=x"00";
-		else 
-			if (W='1') then --ecriture
-			
+	process
+	begin
+		wait until CLK'event and CLK='1';
+			if(RST='0') then 
+				BR<=(others => (others => '0'));
+			else 
+				if (W='1') then --ecriture
+					BR(to_integer(unsigned(Addr_W)))<= DATA;
+				end if;
+				QA <= BR(to_integer(unsigned(Addr_A)));
+				QB <= BR(to_integer(unsigned(Addr_B)));
 			end if;
-		
-		end if;
-end process;
-
-QA<=AUX_A;
-QB<=AUX_B;
-
+	end process;
+	
 end Behavioral;
 

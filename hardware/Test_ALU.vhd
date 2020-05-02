@@ -102,7 +102,7 @@ BEGIN
 		B <= x"01";
 		CTRL_ALU <= "000";
   
-		for i in 0 to 3 loop 
+		for i in 0 to 2 loop 
 			wait for 100 ns;
 			CTRL_ALU <= CTRL_ALU + '1';
 		end loop;
@@ -111,7 +111,7 @@ BEGIN
 		B <= x"55";
 		CTRL_ALU <= "000";
   
-		for i in 0 to 3 loop 
+		for i in 0 to 2 loop 
 			wait for 100 ns;
 			CTRL_ALU <= CTRL_ALU + '1';
 		end loop;
@@ -120,7 +120,7 @@ BEGIN
 		B <= x"01";
 		CTRL_ALU <= "000";
   
-		for i in 0 to 3 loop 
+		for i in 0 to 2 loop 
 			wait for 100 ns;
 			CTRL_ALU <= CTRL_ALU + '1';
 		end loop;
