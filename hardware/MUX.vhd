@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    10:45:54 05/04/2020 
+-- Create Date:    11:17:08 05/04/2020 
 -- Design Name: 
--- Module Name:    Pipeline - Behavioral 
+-- Module Name:    MUX - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,31 +29,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Pipeline is
-    Port ( CLK : in  STD_LOGIC;
-           inA : in  STD_LOGIC_VECTOR (7 downto 0);
-           inB : in  STD_LOGIC_VECTOR (7 downto 0);
-           inC : in  STD_LOGIC_VECTOR (7 downto 0);
-           inOP : in  STD_LOGIC_VECTOR (3 downto 0);
-           outOP : out  STD_LOGIC_VECTOR (3 downto 0);
-           outA : out  STD_LOGIC_VECTOR (7 downto 0);
-           outB : out  STD_LOGIC_VECTOR (7 downto 0);
-           outC : out  STD_LOGIC_VECTOR (7 downto 0));
-end Pipeline;
+entity MUX is
+	 Generic (num : NATURAL := 0); -- nb de MUX
+    Port ( A : in  STD_LOGIC_VECTOR (7 downto 0);
+           B : in  STD_LOGIC_VECTOR (7 downto 0);
+           OP : in  STD_LOGIC_VECTOR (3 downto 0);
+           S : out  STD_LOGIC_VECTOR (7 downto 0));
+end MUX;
 
-architecture Behavioral of Pipeline is
+architecture Behavioral of MUX is
 
 begin
-	process
-	begin
-
-		wait until CLK'event and CLK ='1';
-		outOP <= inOP;
-		outA <= inA;
-		outB <= inB;
-		outC <= inC;
-		
-	end process;
+	S <= 	B when (num = 1 and OP = x"100") else -- DI/EX AFC 100
+			B when (num = 1 and OP = x"101") else -- DI/EX COP 101
+			A when (num = 2 and OP = x"000") else -- EX/Mem ADD 000
+			A when (num = 2 and OP = x"001")	else -- EX/Mem SUB 001
+			A when (num = 2 and OP = x"010")	else -- EX/Mem MUL 010
+			B;
 
 end Behavioral;
 
