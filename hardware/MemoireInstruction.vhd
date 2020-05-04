@@ -36,13 +36,13 @@ entity MemoireInstruction is
 end MemoireInstruction;
 
 architecture Behavioral of MemoireInstruction is
-type table is array (0 to 15) of STD_LOGIC_VECTOR(7 downto 0);
-signal donnee: table ;
+type table is array (0 to 256) of STD_LOGIC_VECTOR(31 downto 0);
+signal instruction: table ;
 begin
 	process
 	begin
 		wait until CLK'event and CLK='1';
-			OUTPUT<= donnee(to_integer(unsigned(ADDR)));
+			OUTPUT<= instruction(to_integer(unsigned(ADDR)));
 	end process;
 
 end Behavioral;

@@ -1,0 +1,1 @@
+xst -intstyle ise -ifn "/home/ise/PSI/Test_banc_registre.xst" -ofn "/home/ise/PSI/Test_banc_registre.syr" 
