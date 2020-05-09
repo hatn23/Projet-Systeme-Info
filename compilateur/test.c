@@ -7,13 +7,12 @@ int main()
     k=8 ;
     printf (i) ;
     
-    if (10==10){
+    if (i==j){
         printf(i);
         printf(i);
     }
     else{
-        printf(j);
-        printf(i);
+        i=i+1;
     }
     k=500;
 

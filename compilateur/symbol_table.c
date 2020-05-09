@@ -77,7 +77,7 @@ symbol getLastSymbol(){
 //return address of the temporary variable if the variable is found in the table
 //else return -1
 int getaddrtmp(){
-	return TABLESIZE+stackpointer;
+	return stackpointer;
 }
 
 //return 1 if the symbol is initialised

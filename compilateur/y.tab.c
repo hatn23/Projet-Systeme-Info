@@ -117,13 +117,15 @@
     }
 
     void exec_operation(char* opt){
-        int first = popTmp()-1;
+        
         int second = popTmp();
+        int first = popTmp();
         add_instruction(opt, first,first,second);
+        pushTmp();
     }
     
 
-#line 127 "y.tab.c" /* yacc.c:339  */
+#line 129 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -231,13 +233,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 62 "compilo_asm.y" /* yacc.c:355  */
+#line 64 "compilo_asm.y" /* yacc.c:355  */
 
     char* str;
     int number;
     float reel;
 
-#line 241 "y.tab.c" /* yacc.c:355  */
+#line 243 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -254,7 +256,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 258 "y.tab.c" /* yacc.c:358  */
+#line 260 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -554,11 +556,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    89,    89,    91,    92,    95,    97,    98,   101,   101,
-     104,   105,   108,   109,   110,   111,   112,   147,   147,   154,
-     147,   169,   169,   182,   183,   184,   185,   186,   187,   188,
-     192,   191,   200,   199,   209,   209,   220,   223,   228,   230,
-     230,   237,   237,   254,   260,   266,   272,   274,   276,   278
+       0,    91,    91,    93,    94,    97,    99,   100,   103,   103,
+     106,   107,   110,   111,   112,   113,   114,   149,   149,   156,
+     149,   171,   171,   184,   185,   186,   187,   188,   189,   190,
+     194,   193,   202,   201,   211,   211,   222,   225,   229,   231,
+     231,   238,   238,   255,   261,   267,   275,   277,   279,   281
 };
 #endif
 
@@ -1393,25 +1395,25 @@ yyreduce:
   switch (yyn)
     {
         case 8:
-#line 101 "compilo_asm.y" /* yacc.c:1646  */
+#line 103 "compilo_asm.y" /* yacc.c:1646  */
     {globalDepth++;}
-#line 1399 "y.tab.c" /* yacc.c:1646  */
+#line 1401 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 101 "compilo_asm.y" /* yacc.c:1646  */
+#line 103 "compilo_asm.y" /* yacc.c:1646  */
     {globalDepth--;}
-#line 1405 "y.tab.c" /* yacc.c:1646  */
+#line 1407 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 147 "compilo_asm.y" /* yacc.c:1646  */
+#line 149 "compilo_asm.y" /* yacc.c:1646  */
     {printf("if starts here \n");}
-#line 1411 "y.tab.c" /* yacc.c:1646  */
+#line 1413 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 147 "compilo_asm.y" /* yacc.c:1646  */
+#line 149 "compilo_asm.y" /* yacc.c:1646  */
     {
                 int line = get_index_tab();
                 //printf("current=%d\n", line); 
@@ -1419,11 +1421,11 @@ yyreduce:
                 add_instruction("JMF",line,condition_status,-1);
                 (yyvsp[-2].number)=line;
                 }
-#line 1423 "y.tab.c" /* yacc.c:1646  */
+#line 1425 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 154 "compilo_asm.y" /* yacc.c:1646  */
+#line 156 "compilo_asm.y" /* yacc.c:1646  */
     {
                 int current = get_index_tab();
                 patch((yyvsp[-4].number),current+1); 
@@ -1431,78 +1433,78 @@ yyreduce:
                 add_instruction("JMP",current +2 ,-1,-1);
                 (yyvsp[-4].number)= current++;
             }
-#line 1435 "y.tab.c" /* yacc.c:1646  */
+#line 1437 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 162 "compilo_asm.y" /* yacc.c:1646  */
+#line 164 "compilo_asm.y" /* yacc.c:1646  */
     {
                 int current = get_index_tab();
                 patch((yyvsp[-7].number),current);
              }
-#line 1444 "y.tab.c" /* yacc.c:1646  */
+#line 1446 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 169 "compilo_asm.y" /* yacc.c:1646  */
+#line 171 "compilo_asm.y" /* yacc.c:1646  */
     {
                 int line = get_index_tab();
                 int condition_status= popTmp();
                 add_instruction("JMF",line,condition_status,-1);
                 (yyvsp[-1].number)=line;
             }
-#line 1455 "y.tab.c" /* yacc.c:1646  */
+#line 1457 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 174 "compilo_asm.y" /* yacc.c:1646  */
+#line 176 "compilo_asm.y" /* yacc.c:1646  */
     {
                 int current = get_index_tab();
                 add_instruction("JMP",(yyvsp[-3].number)-1 ,-1,-1);
                 patch((yyvsp[-3].number),current+1);
                 (yyvsp[-3].number)= current++;
             }
-#line 1466 "y.tab.c" /* yacc.c:1646  */
+#line 1468 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 182 "compilo_asm.y" /* yacc.c:1646  */
+#line 184 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition("==");}
-#line 1472 "y.tab.c" /* yacc.c:1646  */
+#line 1474 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 183 "compilo_asm.y" /* yacc.c:1646  */
+#line 185 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition("<");}
-#line 1478 "y.tab.c" /* yacc.c:1646  */
+#line 1480 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 184 "compilo_asm.y" /* yacc.c:1646  */
+#line 186 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition(">");}
-#line 1484 "y.tab.c" /* yacc.c:1646  */
+#line 1486 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 185 "compilo_asm.y" /* yacc.c:1646  */
+#line 187 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition("<=");}
-#line 1490 "y.tab.c" /* yacc.c:1646  */
+#line 1492 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 186 "compilo_asm.y" /* yacc.c:1646  */
+#line 188 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition(">=");}
-#line 1496 "y.tab.c" /* yacc.c:1646  */
+#line 1498 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 187 "compilo_asm.y" /* yacc.c:1646  */
+#line 189 "compilo_asm.y" /* yacc.c:1646  */
     {exec_condition("!=");}
-#line 1502 "y.tab.c" /* yacc.c:1646  */
+#line 1504 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 192 "compilo_asm.y" /* yacc.c:1646  */
+#line 194 "compilo_asm.y" /* yacc.c:1646  */
     {
              var=malloc(sizeof((yyvsp[0].str)));
              strcpy(var,(yyvsp[0].str));
@@ -1510,11 +1512,11 @@ yyreduce:
              printf("Declaration 1\n");
              //printSymbolTable();
             }
-#line 1514 "y.tab.c" /* yacc.c:1646  */
+#line 1516 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 200 "compilo_asm.y" /* yacc.c:1646  */
+#line 202 "compilo_asm.y" /* yacc.c:1646  */
     {
              var=malloc(sizeof((yyvsp[0].str)));
              strcpy(var,(yyvsp[0].str));
@@ -1522,11 +1524,11 @@ yyreduce:
              printf("Declaration 1 const\n");
              //printSymbolTable();
             }
-#line 1526 "y.tab.c" /* yacc.c:1646  */
+#line 1528 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 209 "compilo_asm.y" /* yacc.c:1646  */
+#line 211 "compilo_asm.y" /* yacc.c:1646  */
     {
                     var=malloc(sizeof((yyvsp[0].str)));
                     strcpy(var,(yyvsp[0].str));
@@ -1538,111 +1540,112 @@ yyreduce:
                         pushSymbol((yyvsp[0].str),0,globalDepth);
                         printf("Multiple declaration\n");
                     } }
-#line 1542 "y.tab.c" /* yacc.c:1646  */
+#line 1544 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 223 "compilo_asm.y" /* yacc.c:1646  */
+#line 225 "compilo_asm.y" /* yacc.c:1646  */
     {
-                            printf("HELLO %s",var);
-                            add_instruction("STORE", findSymbol(var,globalDepth),popTmp(), -1);
+                            add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
                                         free(var);
                                         }
-#line 1552 "y.tab.c" /* yacc.c:1646  */
+#line 1553 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 230 "compilo_asm.y" /* yacc.c:1646  */
+#line 231 "compilo_asm.y" /* yacc.c:1646  */
     {printf("printf %s\n", (yyvsp[0].str));
                                 if(findSymbol((yyvsp[0].str),globalDepth)!=-1) add_instruction("PRI",findSymbol((yyvsp[0].str),globalDepth),-1, -1);
                                 else yyerror("Variable is never declared");
                                 }
-#line 1561 "y.tab.c" /* yacc.c:1646  */
+#line 1562 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 237 "compilo_asm.y" /* yacc.c:1646  */
+#line 238 "compilo_asm.y" /* yacc.c:1646  */
     {
                     var=malloc(sizeof((yyvsp[0].str)));
                     strcpy(var,(yyvsp[0].str));
                 }
-#line 1570 "y.tab.c" /* yacc.c:1646  */
+#line 1571 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 240 "compilo_asm.y" /* yacc.c:1646  */
+#line 241 "compilo_asm.y" /* yacc.c:1646  */
     {
                 printf("Affectation %s \n",var);
                 if(findSymbol(var,globalDepth)!=-1){
                     if(isConstant(var,globalDepth)==1) yyerror("Temptation to modify a constant ");
                     else {
-                        add_instruction("STORE", findSymbol(var,globalDepth),popTmp(), -1);
+                        add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
                         free(var);
                     }
                 }else{
                     yyerror("Variable is never declared");
                 }
             }
-#line 1587 "y.tab.c" /* yacc.c:1646  */
+#line 1588 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 254 "compilo_asm.y" /* yacc.c:1646  */
+#line 255 "compilo_asm.y" /* yacc.c:1646  */
     {
-                        printf("meet a float\n");
+                        printf("float %f\n",(yyvsp[0].reel));
                         int tmp=pushTmp();
                         add_instruction("AFC", tmp, (yyvsp[0].reel), -1);
                         }
-#line 1597 "y.tab.c" /* yacc.c:1646  */
+#line 1598 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 260 "compilo_asm.y" /* yacc.c:1646  */
+#line 261 "compilo_asm.y" /* yacc.c:1646  */
     {
-                        printf("meet a int\n");
+                        printf("int %d\n",(yyvsp[0].number));
 			            int tmp=pushTmp();
                         add_instruction("AFC", tmp, (yyvsp[0].number), -1);
                         }
-#line 1607 "y.tab.c" /* yacc.c:1646  */
+#line 1608 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 266 "compilo_asm.y" /* yacc.c:1646  */
+#line 267 "compilo_asm.y" /* yacc.c:1646  */
     {
                         int index=findSymbol((yyvsp[0].str),globalDepth);
                         printf("tVAR= %s",(yyvsp[0].str));
+                        int tmp=pushTmp();
+                        add_instruction("LOAD",tmp,index,-1);
                         if(index && !isInitialised((yyvsp[0].str),globalDepth))
                             yyerror("non initialised variable");
                         }
-#line 1618 "y.tab.c" /* yacc.c:1646  */
+#line 1621 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 272 "compilo_asm.y" /* yacc.c:1646  */
+#line 275 "compilo_asm.y" /* yacc.c:1646  */
     {exec_operation("ADD");}
-#line 1624 "y.tab.c" /* yacc.c:1646  */
+#line 1627 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 274 "compilo_asm.y" /* yacc.c:1646  */
+#line 277 "compilo_asm.y" /* yacc.c:1646  */
     {exec_operation("SUB");}
-#line 1630 "y.tab.c" /* yacc.c:1646  */
+#line 1633 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 276 "compilo_asm.y" /* yacc.c:1646  */
+#line 279 "compilo_asm.y" /* yacc.c:1646  */
     {exec_operation("MUL");}
-#line 1636 "y.tab.c" /* yacc.c:1646  */
+#line 1639 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 278 "compilo_asm.y" /* yacc.c:1646  */
+#line 281 "compilo_asm.y" /* yacc.c:1646  */
     {exec_operation("DIV");}
-#line 1642 "y.tab.c" /* yacc.c:1646  */
+#line 1645 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1646 "y.tab.c" /* yacc.c:1646  */
+#line 1649 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1870,7 +1873,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 280 "compilo_asm.y" /* yacc.c:1906  */
+#line 283 "compilo_asm.y" /* yacc.c:1906  */
 
 int main(void){    
     

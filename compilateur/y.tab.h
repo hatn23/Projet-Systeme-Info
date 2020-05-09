@@ -118,7 +118,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 62 "compilo_asm.y" /* yacc.c:1909  */
+#line 64 "compilo_asm.y" /* yacc.c:1909  */
 
     char* str;
     int number;

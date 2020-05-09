@@ -52,9 +52,11 @@
     }
 
     void exec_operation(char* opt){
-        int first = popTmp()-1;
+        
         int second = popTmp();
+        int first = popTmp();
         add_instruction(opt, first,first,second);
+        pushTmp();
     }
     
 %}
@@ -221,8 +223,7 @@ MultipleDeclaration: tSEP tVAR{
                     ;
 
 AffectationDuringDeclaration: tEQUAL E {
-                            printf("HELLO %s",var);
-                            add_instruction("STORE", findSymbol(var,globalDepth),popTmp(), -1);
+                            add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
                                         free(var);
                                         }
                               |Vide;
@@ -242,7 +243,7 @@ Aff:        tVAR {
                 if(findSymbol(var,globalDepth)!=-1){
                     if(isConstant(var,globalDepth)==1) yyerror("Temptation to modify a constant ");
                     else {
-                        add_instruction("STORE", findSymbol(var,globalDepth),popTmp(), -1);
+                        add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
                         free(var);
                     }
                 }else{
@@ -252,13 +253,13 @@ Aff:        tVAR {
             ;
 
 E:          tREAL       {
-                        printf("meet a float\n");
+                        printf("float %f\n",$1);
                         int tmp=pushTmp();
                         add_instruction("AFC", tmp, $1, -1);
                         }
                         
             |tNUMBER    {
-                        printf("meet a int\n");
+                        printf("int %d\n",$1);
 			            int tmp=pushTmp();
                         add_instruction("AFC", tmp, $1, -1);
                         }
@@ -266,6 +267,8 @@ E:          tREAL       {
             |tVAR       {
                         int index=findSymbol($1,globalDepth);
                         printf("tVAR= %s",$1);
+                        int tmp=pushTmp();
+                        add_instruction("LOAD",tmp,index,-1);
                         if(index && !isInitialised($1,globalDepth))
                             yyerror("non initialised variable");
                         };
