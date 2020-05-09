@@ -1,0 +1,34 @@
+#define tMain 1
+#define tINT 2
+#define tCONST 3
+#define tCHAR 4
+#define tFLOAT 5
+#define tVOID 6
+#define tNUMBER 7
+#define tREAL   8
+#define tIF 9
+#define tELSE 10
+#define tWHILE 11
+#define tRET 12
+#define tADD 13
+#define tSUB 14
+#define tMUL 15
+#define tDIV 16
+#define tEQUAL 17
+#define tOB 18
+#define tCB 19
+#define tCMP 20
+#define tSEP 21
+#define tSEMCOL 22
+#define tINF 23
+#define tSUP 24
+#define tINFEQUAL 25
+#define tSUPEQUAL 26
+#define tERROR 27
+#define YYSTYPE int 
+#define tPRINTF 28
+#define tVAR 29
+#define tOA 30
+#define tCA 31
+YYSTYPE yylval;
+// extern YYSTYPE yytext;
