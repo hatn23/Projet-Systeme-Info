@@ -29,6 +29,8 @@ int getaddrtmp();
 //else return 0
 int isInitialised(char* name,int depth);
 
+int setInitialised (char* name,int depth);
+
 //return index(address) if the symbol is found in the symbolTable
 //else return 0
 int findSymbol(char* name,int depth);

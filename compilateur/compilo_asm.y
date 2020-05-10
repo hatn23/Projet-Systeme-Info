@@ -222,28 +222,36 @@ MultipleDeclaration: tSEP tVAR{
                     | Vide
                     ;
 
-AffectationDuringDeclaration: tEQUAL E {
+AffectationDuringDeclaration: tEQUAL E 
+                            {
                             add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
-                                        free(var);
-                                        }
-                              |Vide;
+                            setInitialised(var,globalDepth);
+                            free(var);
+                            }
+                            |Vide;
 
 Print:      tPRINTF tOB tVAR    {printf("printf %s\n", $3);
-                                if(findSymbol($3,globalDepth)!=-1) add_instruction("PRI",findSymbol($3,globalDepth),-1, -1);
-                                else yyerror("Variable is never declared");
+                                if(findSymbol($3,globalDepth)!=-1 && isInitialised($3,globalDepth)==1) add_instruction("PRI",findSymbol($3,globalDepth),-1, -1);
+                                else yyerror("Variable is never declared or never initialised");
                                 } tCB tSEMCOL                        
             ;
 
 
-Aff:        tVAR {
-                    var=malloc(sizeof($1));
-                    strcpy(var,$1);
-                } tEQUAL E tSEMCOL {
+Aff:        tVAR 
+            {
+                var=malloc(sizeof($1));
+                strcpy(var,$1);
+            } 
+            tEQUAL E tSEMCOL 
+            {
                 printf("Affectation %s \n",var);
                 if(findSymbol(var,globalDepth)!=-1){
-                    if(isConstant(var,globalDepth)==1) yyerror("Temptation to modify a constant ");
+                    if(isConstant(var,globalDepth)==1){
+                        yyerror("Temptation to modify a constant ");
+                    } 
                     else {
                         add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
+                        setInitialised(var,globalDepth);
                         free(var);
                     }
                 }else{
@@ -266,12 +274,15 @@ E:          tREAL       {
                         
             |tVAR       {
                         int index=findSymbol($1,globalDepth);
-                        printf("tVAR= %s",$1);
-                        int tmp=pushTmp();
-                        add_instruction("LOAD",tmp,index,-1);
+                        printf("tVAR= %s\n",$1);
                         if(index && !isInitialised($1,globalDepth))
                             yyerror("non initialised variable");
-                        };
+                        else{
+                            int tmp=pushTmp();
+                            add_instruction("LOAD",tmp,index,-1);
+                        }
+                        }
+                        ;
             |E tADD E {exec_operation("ADD");};
            
             |E tSUB E {exec_operation("SUB");};

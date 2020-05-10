@@ -108,6 +108,15 @@ int isConstant(char* name,int depth)
 	return symbolTable[i]->isConstant;
 }
 
+int setInitialised (char* name,int depth){
+	int index= findSymbol(name, depth);
+	if(index!=-1){
+		symbolTable[index]->isInitialised=1;
+		return 0;
+	}
+	else return -1;
+}
+
 //print symbol
 void printSymbol(symbol *s)
 {
