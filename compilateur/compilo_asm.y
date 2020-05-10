@@ -10,6 +10,7 @@
     int yylex(void);
     int yydebug = 1;
     int cpt_err=0;
+    int saveLine;
     char* var;
     void yyerror (char const *s) {
         cpt_err++;
@@ -114,58 +115,58 @@ Contenu:     Aff
             |While
             ;
 
-// IfStatement:tIF{printf("if starts here \n");} Condition{
+IfStatement:tIF{printf("if \n");} Condition{
+                int line = get_index_tab();
+                printf("current=%d\n", line); 
+                int condition_status= popTmp();
+                add_instruction("JMF",line,condition_status,-1);
+                saveLine=line;
+                }
+             tOA {globalDepth++;} Contenus{
+                int current = get_index_tab();
+                patch(saveLine,current+1); 
+                printf("patch=%d +2\n", current);
+                add_instruction("JMP",current+1 ,-1,-1);
+                saveLine= current++;
+            }
+             tCA {globalDepth--;} Else {printf("end if\n");} 
+            ;
+
+Else:       tELSE{printf("else here\n");} tOA {globalDepth++;}  Contenus  {
+                int current = get_index_tab();
+                printf("patch=%d +1   %d\n", current, saveLine);
+                patch(saveLine,current);
+                
+            } 
+            tCA {globalDepth--;}
+            |tELSE Contenu {
+                int current = get_index_tab();
+                printf("patch=%d +1\n", current);
+                patch(saveLine,current);
+            } 
+            |Vide
+            ;
+
+// IfStatement:tIF{printf("if \n");} Condition{
 //                 int line = get_index_tab();
-//                 printf("current=%d\n", line); 
+//                 //printf("current=%d\n", line); 
 //                 int condition_status= popTmp();
 //                 add_instruction("JMF",line,condition_status,-1);
 //                 $1=line;
 //                 }
-//              tOA {globalDepth++;} Contenus{
+//              Body{
 //                 int current = get_index_tab();
 //                 patch($1,current+1); 
 //                 printf("patch=%d +2\n", current);
-//                 add_instruction("JMP",current+1 ,-1,-1);
+//                 add_instruction("JMP",current +2 ,-1,-1);
 //                 $1= current++;
 //             }
-//              tCA {globalDepth--;} Else {printf("end if\n");} 
-//             ;
-
-// Else:       tELSE{printf("else here\n");} tOA {globalDepth++;}  Contenus  {
+//              tELSE Body 
+//              {
 //                 int current = get_index_tab();
-//                 printf("patch=%d +1   %d\n", current, $1);
-//                 patch($1,current+1);
-                
-//             } 
-//             tCA {globalDepth--;}
-//             |tELSE Contenu {
-//                 int current = get_index_tab();
-//                 printf("patch=%d +1\n", current);
-//                 patch($1,current+1);
-//             } 
-//             |Vide
+//                 patch($1,current);
+//              } 
 //             ;
-
-IfStatement:tIF{printf("if starts here \n");} Condition{
-                int line = get_index_tab();
-                //printf("current=%d\n", line); 
-                int condition_status= popTmp();
-                add_instruction("JMF",line,condition_status,-1);
-                $1=line;
-                }
-             Body{
-                int current = get_index_tab();
-                patch($1,current+1); 
-                printf("patch=%d +2\n", current);
-                add_instruction("JMP",current +2 ,-1,-1);
-                $1= current++;
-            }
-             tELSE Body 
-             {
-                int current = get_index_tab();
-                patch($1,current);
-             } 
-            ;
 
 
 While:      tWHILE  Condition {
