@@ -40,11 +40,15 @@ end MUX;
 architecture Behavioral of MUX is
 
 begin
-	S <= 	B when (num = 1 and OP = x"100") else -- DI/EX AFC 100
+	S <= 	B when (num = 1 and OP = x"111") else -- DI/EX AFC 111
+			B when (num = 1 and OP = x"100") else -- DI/EX LOAD 100
 			B when (num = 1 and OP = x"101") else -- DI/EX COP 101
+			B when (num = 1 and OP = x"110") else -- DI/EX STORE 110
 			A when (num = 2 and OP = x"000") else -- EX/Mem ADD 000
 			A when (num = 2 and OP = x"001")	else -- EX/Mem SUB 001
 			A when (num = 2 and OP = x"010")	else -- EX/Mem MUL 010
+			A when (num = 3 and OP = x"100") else -- Mem/RE LOAD 100
+			B when (num = 4 and OP = x"110") else -- sortie EX/Mem STORE 110
 			B;
 
 end Behavioral;
