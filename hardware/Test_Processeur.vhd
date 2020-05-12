@@ -13,6 +13,7 @@
           PORT(
                   CLK_PROC : IN std_logic;
 						RST_PROC : IN std_logic
+						
                   );
           END COMPONENT;
 
@@ -46,7 +47,7 @@
 				wait for CLK_PROC_period*10;
 
 				-- insert stimulus here 
-
+				
 				wait;
 			END PROCESS ;
   END;

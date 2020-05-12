@@ -34,7 +34,9 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 entity Processeur is
     Port ( CLK_PROC : in  STD_LOGIC;
            RST_PROC : in  STD_LOGIC;
-			  IP_PROC : in STD_LOGIC_VECTOR(7 downto 0));
+			  QA: out STD_LOGIC_VECTOR (7 downto 0);
+			  QB: out STD_LOGIC_VECTOR (7 downto 0)
+			  );
 end Processeur;
 
 architecture Behavorial of Processeur is
@@ -55,7 +57,7 @@ architecture Behavorial of Processeur is
 		Generic (num : NATURAL := 0); -- nb de MUX
 		Port (	A : in  STD_LOGIC_VECTOR (7 downto 0);
 					B : in  STD_LOGIC_VECTOR (7 downto 0);
-					OP : in  STD_LOGIC_VECTOR (3 downto 0);
+					OP : in  STD_LOGIC_VECTOR (7 downto 0);
 					S : out  STD_LOGIC_VECTOR (7 downto 0));
 	end component;
 	
@@ -79,15 +81,15 @@ architecture Behavorial of Processeur is
 					inA : in  STD_LOGIC_VECTOR (7 downto 0);
 					inB : in  STD_LOGIC_VECTOR (7 downto 0);
 					inC : in  STD_LOGIC_VECTOR (7 downto 0);
-					inOP : in  STD_LOGIC_VECTOR (3 downto 0);
-					outOP : out  STD_LOGIC_VECTOR (3 downto 0);
+					inOP : in  STD_LOGIC_VECTOR (7 downto 0);
+					outOP : out  STD_LOGIC_VECTOR (7 downto 0);
 					outA : out  STD_LOGIC_VECTOR (7 downto 0);
 					outB : out  STD_LOGIC_VECTOR (7 downto 0);
 					outC : out  STD_LOGIC_VECTOR (7 downto 0));
 	end component;
 	
 	component LC
-		 Port ( 	OP : in  STD_LOGIC_VECTOR (3 downto 0);
+		 Port ( 	OP : in  STD_LOGIC_VECTOR (7 downto 0);
 					outLC : out  STD_LOGIC );
 	end component;
 	
@@ -104,7 +106,7 @@ architecture Behavorial of Processeur is
 	end component;
 	
 	signal IP : STD_LOGIC_VECTOR (7 downto 0);
-	signal OP_DI,OP_EX, OP_MEM, OP_RE:STD_LOGIC_VECTOR(3 downto 0);
+	signal OP_DI,OP_EX, OP_MEM, OP_RE:STD_LOGIC_VECTOR(7 downto 0);
 	signal A_DI, B_DI, C_DI : STD_LOGIC_VECTOR(7 downto 0);
 	signal A_EX, B_EX, C_EX : STD_LOGIC_VECTOR(7 downto 0);
 	signal A_MEM, B_MEM, C_MEM : STD_LOGIC_VECTOR(7 downto 0);
@@ -113,11 +115,20 @@ architecture Behavorial of Processeur is
 	signal MUX_BdR_OUT: STD_LOGIC_VECTOR(7 downto 0);
 	signal INSTR: STD_LOGIC_VECTOR(31 downto 0);
 	signal LC_OUT : STD_LOGIC;
-
-begin
+	signal current_line: STD_LOGIC_VECTOR(7 downto 0) := (others=>'0');
 	
+begin
+
+	QA<= REG_QA;
+	QB<= REG_QB;
+	process
+		begin
+			wait until CLK_PROC'event and CLK_PROC='1';
+				current_line <= current_line + '1';
+		end process;
+		
 	Memoire_Instr : MemoireInstruction PORT MAP (
-		ADDR => IP_PROC,
+		ADDR => current_line,
 		CLK => CLK_PROC,
 		OUTPUT => INSTR
 	);
@@ -125,9 +136,9 @@ begin
 	LI_DI :  Pipeline PORT MAP (
 			CLK => CLK_PROC,
 			inA => INSTR(23 downto 16),
-			inB => INSTR(15 downto 8),
+		inB => INSTR(15 downto 8),
 			inC => INSTR(7 downto 0),
-			inOP => INSTR(27 downto 24),
+			inOP => INSTR(31 downto 24),
 			outOP => OP_DI,
 			outA => A_DI,
 			outB => B_DI,
@@ -195,7 +206,7 @@ begin
 			OP => OP_DI,
 			S => MUX_BdR_OUT
 	);
-		
+	
 
 end Behavorial;
 

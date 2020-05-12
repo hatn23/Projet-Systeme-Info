@@ -34,8 +34,8 @@ entity Pipeline is
            inA : in  STD_LOGIC_VECTOR (7 downto 0);
            inB : in  STD_LOGIC_VECTOR (7 downto 0);
            inC : in  STD_LOGIC_VECTOR (7 downto 0);
-           inOP : in  STD_LOGIC_VECTOR (3 downto 0);
-           outOP : out  STD_LOGIC_VECTOR (3 downto 0);
+           inOP : in  STD_LOGIC_VECTOR (7 downto 0);
+           outOP : out  STD_LOGIC_VECTOR (7 downto 0);
            outA : out  STD_LOGIC_VECTOR (7 downto 0);
            outB : out  STD_LOGIC_VECTOR (7 downto 0);
            outC : out  STD_LOGIC_VECTOR (7 downto 0));
