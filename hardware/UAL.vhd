@@ -42,9 +42,9 @@ begin
 	radd <= ("0"&A) + ("0"&B);
 	rsub <= ("0"&A) - ("0"&B);
 	rmul <= A * B;
-	Stmp <= 	radd (7 downto 0) when CTRL_ALU="000" else
-				rsub (7 downto 0) when CTRL_ALU="001" else
-				rmul (7 downto 0) when CTRL_ALU="010" else
+	Stmp <= 	radd (7 downto 0) when CTRL_ALU="001" else --ADD 0x01
+				rsub (7 downto 0) when CTRL_ALU="011" else --SOU 0x03
+				rmul (7 downto 0) when CTRL_ALU="010" else --MUL 0x02
 				x"00";
 	C <= radd(8);
 	O <= '0' when rmul(15 downto 8) = "00000000" else '1';
