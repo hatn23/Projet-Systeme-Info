@@ -1,6 +1,7 @@
 # Projet-Systeme-Info
+##Pour la partie compilateur: 
 
-Compilation : <br/>
+## Compilation : <br/>
 `make clean` <br/>
 `make all` <br/>
 
