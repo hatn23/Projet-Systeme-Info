@@ -34,6 +34,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 entity Processeur is
     Port ( CLK_PROC : in  STD_LOGIC;
            RST_PROC : in  STD_LOGIC;
+			  INPUT_ADDR: in STD_LOGIC_VECTOR (7 downto 0);
 			  QA: out STD_LOGIC_VECTOR (7 downto 0);
 			  QB: out STD_LOGIC_VECTOR (7 downto 0)
 			  );
@@ -121,14 +122,10 @@ begin
 
 	QA<= REG_QA;
 	QB<= REG_QB;
-	process
-		begin
-			wait until CLK_PROC'event and CLK_PROC='1';
-				current_line <= current_line + '1';
-		end process;
+	
 		
 	Memoire_Instr : MemoireInstruction PORT MAP (
-		ADDR => current_line,
+		ADDR => INPUT_ADDR,
 		CLK => CLK_PROC,
 		OUTPUT => INSTR
 	);

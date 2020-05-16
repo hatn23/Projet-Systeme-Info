@@ -27,6 +27,7 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+use IEEE.std_logic_unsigned.all;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -88,11 +89,11 @@ BEGIN
       -- insert stimulus here 
 		ADDR<=x"00";
 		wait for CLK_period*3;
-		ADDR<=x"01";
-		wait for CLK_period*3;
-		ADDR<=x"02";
-		wait for CLK_period*3;
 		
+		wait for CLK_period*3;
+		for i in 0 to 255 loop
+			ADDR<= ADDR + x"1";
+		end loop;
       wait;
    end process;
 
