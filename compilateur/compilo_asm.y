@@ -119,7 +119,7 @@ IfStatement:tIF{printf("if \n");} Condition{
                 int line = get_index_tab();
                 printf("current=%d\n", line); 
                 int condition_status= popTmp();
-                add_instruction("JMF",line,condition_status,-1);
+                add_instruction("JMF",condition_status,line,-1);
                 saveLine=line;
                 }
              tOA {globalDepth++;} Contenus{
