@@ -297,6 +297,7 @@ int main(void){
     
     yyparse();
     print_all();
+    print_binaire();
     printSymbolTable();
     return 0;
 }

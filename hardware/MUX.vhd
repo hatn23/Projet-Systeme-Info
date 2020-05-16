@@ -44,8 +44,8 @@ begin
 			B when (num = 1 and OP = x"07") else -- DI/EX LOAD 100
 			B when (num = 1 and OP = x"05") else -- DI/EX COP 101
 			B when (num = 1 and OP = x"08") else -- DI/EX STORE 110
-			A when (num = 2 and OP = x"01") else -- EX/Mem ADD 000
-			A when (num = 2 and OP = x"03")	else -- EX/Mem SUB 001
+			A when (num = 2 and OP = x"01") else -- EX/Mem ADD 001
+			A when (num = 2 and OP = x"03")	else -- EX/Mem SUB 011
 			A when (num = 2 and OP = x"02")	else -- EX/Mem MUL 010
 			A when (num = 3 and OP = x"07") else -- Mem/RE LOAD 100
 			B when (num = 4 and OP = x"08") else -- sortie EX/Mem STORE 110
