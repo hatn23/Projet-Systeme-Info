@@ -31,13 +31,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity LC is
     Port ( OP : in  STD_LOGIC_VECTOR (7 downto 0);
-           outLC : out  STD_LOGIC_VECTOR (2 downto 0));
+           outLC : out  STD_LOGIC);
 end LC;
 
 architecture Behavioral of LC is
 
 begin
-	-- A faire
+	--AFC
+	outLC <= '1' when (OP=b"0110") else '0';
 
 end Behavioral;
 

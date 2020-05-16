@@ -33,19 +33,24 @@ entity MUX is
 	 Generic (num : NATURAL := 0); -- nb de MUX
     Port ( A : in  STD_LOGIC_VECTOR (7 downto 0);
            B : in  STD_LOGIC_VECTOR (7 downto 0);
-           OP : in  STD_LOGIC_VECTOR (3 downto 0);
+           OP : in  STD_LOGIC_VECTOR (7 downto 0);
            S : out  STD_LOGIC_VECTOR (7 downto 0));
 end MUX;
 
 architecture Behavioral of MUX is
 
 begin
-	S <= 	B when (num = 1 and OP = x"100") else -- DI/EX AFC 100
-			B when (num = 1 and OP = x"101") else -- DI/EX COP 101
-			A when (num = 2 and OP = x"000") else -- EX/Mem ADD 000
-			A when (num = 2 and OP = x"001")	else -- EX/Mem SUB 001
-			A when (num = 2 and OP = x"010")	else -- EX/Mem MUL 010
+	S <= 	B when (num = 1 and OP = x"06") else -- DI/EX AFC 111
+			B when (num = 1 and OP = x"07") else -- DI/EX LOAD 100
+			B when (num = 1 and OP = x"05") else -- DI/EX COP 101
+			B when (num = 1 and OP = x"08") else -- DI/EX STORE 110
+			A when (num = 2 and OP = x"01") else -- EX/Mem ADD 000
+			A when (num = 2 and OP = x"03")	else -- EX/Mem SUB 001
+			A when (num = 2 and OP = x"02")	else -- EX/Mem MUL 010
+			A when (num = 3 and OP = x"07") else -- Mem/RE LOAD 100
+			B when (num = 4 and OP = x"08") else -- sortie EX/Mem STORE 110
 			B;
+			
 
 end Behavioral;
 
