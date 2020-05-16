@@ -27,6 +27,7 @@ int get_index_execute(){
 }
 
 void interpreter(){
+    FILE * file_asmbin = fopen("asm_bin.asm","w+");
     while (index_execute < index_tab){
        char operation[5];
        strcpy(operation,tab_instruction[index_execute].operation);
@@ -37,19 +38,19 @@ void interpreter(){
            // ADD @résultat @opérande1 @opérande2
 			registre[r1] = registre[r2] + registre[r3];
             //printf("r%d = r%d + r%d = %d + %d = %d\n",r1, r2, r3, registre[r2],registre[r3],registre[r1]);
-            printf("01%d%d%d\n", registre[r1],registre[r2],registre[r3]);
+            fprintf(file_asmbin,"01%d%d%d\n", registre[r1],registre[r2],registre[r3]);
         } 
         else if (!strcmp(operation, "MUL")) {
             // MUL @résultat @opérande1 @opérande2
             registre[r1] = registre[r2] * registre[r3];
             //printf("r%d = r%d * r%d = %d * %d = %d\n",r1, r2, r3,registre[r2],registre[r3],registre[r1]);
-            printf("02%d%d%d\n", registre[r1],registre[r2],registre[r3]);
+            fprintf(file_asmbin,"02%d%d%d\n", registre[r1],registre[r2],registre[r3]);
         }
         else if (!strcmp(operation, "SOU")) {
             // SOU @résultat @opérande1 @opérande2
             registre[r1] = registre[r2] - registre[r3];
             //printf("r%d = r%d - r%d = %d - %d = %d\n",r1, r2, r3, registre[r2],registre[r3], registre[r1]);
-            printf("03%d%d%d\n", registre[r1],registre[r2],registre[r3]);
+            fprintf(file_asmbin,"03%d%d%d\n", registre[r1],registre[r2],registre[r3]);
         }
         else if (!strcmp(operation, "DIV")) {
             // DIV @résultat @opérande1 @opérande2
@@ -59,13 +60,13 @@ void interpreter(){
         else if (!strcmp(operation, "COP")) {
             // COP @résultat @opérande
             registre[r1] = registre[r2];
-            printf("05%d%d%d\n", registre[r1],registre[r2]);
+            fprintf(file_asmbin,"05%d%d\n", registre[r1],registre[r2]);
         }
         else if (!strcmp(operation, "AFC")) {
             // AFC @résultat val_const
             registre[r1] = r2;
             //printf("r%d = %d\n", r1, registre[r1]);
-            printf("06%d%d\n", registre[r1],r2);
+            fprintf(file_asmbin,"06%d%d\n", registre[r1],r2);
 
         }
         else if (!strcmp(operation, "JMP")) {
@@ -125,16 +126,17 @@ void interpreter(){
         else if (!strcmp(operation,"LOAD")){
             registre[r1] = memory[r2];
 			//printf("r%d is load to r%d from @%d\n", r1, memory[r2], r2);
-            printf("07%d%d00\n", registre[r1],memory[r2]);
+            fprintf(file_asmbin,"07%d%d00\n", registre[r1],memory[r2]);
         }
         else if (!strcmp(operation,"STORE")){
             memory[r1] = registre[r2];
 			//printf("r%d stores %d at @%d\n", r2, memory[r1], r1);
-            printf("08%d%d00\n", memory[r1],registre[r2]);
+            fprintf(file_asmbin,"08%d%d00\n", memory[r1],registre[r2]);
 
         }
         index_execute++;
     }
+    fclose(file_asmbin);
 }
 
 void print_instruction(instruction i){
