@@ -139,9 +139,9 @@ void print_instruction(instruction i){
 void print_all(){
     FILE * file_asm = fopen("asm.txt","w+");
     for (int i = 0; i < index_tab; i++){
-        fprintf(file_asm,"%d. ", i);
+        //fprintf(file_asm,"%d. ", i);
         //print_instruction(tab_instruction[i]);
-        fprintf(file_asm,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", tab_instruction[i].operation, tab_instruction[i].r1, tab_instruction[i].r2, tab_instruction[i].r3);
+        //fprintf(file_asm,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", tab_instruction[i].operation, tab_instruction[i].r1, tab_instruction[i].r2, tab_instruction[i].r3);
     }
     fclose(file_asm);
 }
@@ -150,7 +150,7 @@ char *dec_to_hex(int dec){
     char hex[3];
     char *ret= malloc(3);
     int ind = 0;              /*initialize index to zero*/
-    if (dec != -1){
+    if (dec != -1 && dec > 15 && dec < 256){
         while(dec > 0){
             switch(dec%16){
                 case 10:
@@ -177,9 +177,44 @@ char *dec_to_hex(int dec){
         }
 
     }
+    else if (dec >0 && dec < 16) {
+        switch(dec){
+            case 1:
+                strcpy(ret,"01"); break;
+            case 2:
+                strcpy(ret,"02"); break;
+            case 3:
+                strcpy(ret,"03"); break;
+            case 4:
+                strcpy(ret,"04"); break;
+            case 5:
+                strcpy(ret,"05"); break;
+            case 6:
+                strcpy(ret,"06"); break;
+            case 7:
+                strcpy(ret,"07"); break;
+            case 8:
+                strcpy(ret,"08"); break;
+            case 9:
+                strcpy(ret,"09"); break;
+            case 10:
+                strcpy(ret,"0A"); break;
+            case 11:
+                strcpy(ret,"0B"); break;
+            case 12:
+                strcpy(ret,"0C"); break;
+            case 13:
+                strcpy(ret,"0D"); break;
+            case 14:
+                strcpy(ret,"0E"); break;
+            case 15:
+                strcpy(ret,"0F"); break;
+            default:
+                strcpy(ret,"00");
+        }
+    }
     else {
-        strcpy(ret,"00");
-           
+        strcpy(ret,"00");      
     }
     return ret;
 
@@ -189,7 +224,7 @@ void print_binaire (){
     FILE * file_asmbin = fopen("asm_bin.asm","w+");
     char ret[3];
     for (int i = 0; i < index_tab; i++){
-        //fprintf(file_asm,"%d. ", i);
+        //fprintf(file_asmbin,"%d. ", i);
         //print_instruction(tab_instruction[i]);
         if (!strcmp(tab_instruction[i].operation, "ADD")) {
             strcpy(ret,"01");
@@ -236,4 +271,9 @@ void patch(int from, int to){
     print_all();
     interpreter();
     printf("index execute : %d \n", index_execute);
+    printf("2 : %s\n",dec_to_hex(2));
+    printf("32 : %s\n",dec_to_hex(32));
+    printf("11 : %s\n",dec_to_hex(11));
+    printf("167 : %s\n",dec_to_hex(167));
+    printf("647 : %s\n",dec_to_hex(647));
 }*/
