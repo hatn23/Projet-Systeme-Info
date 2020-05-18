@@ -139,9 +139,9 @@ void print_instruction(instruction i){
 void print_all(){
     FILE * file_asm = fopen("asm.txt","w+");
     for (int i = 0; i < index_tab; i++){
-        //fprintf(file_asm,"%d. ", i);
+        fprintf(file_asm,"%d. ", i);
         //print_instruction(tab_instruction[i]);
-        //fprintf(file_asm,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", tab_instruction[i].operation, tab_instruction[i].r1, tab_instruction[i].r2, tab_instruction[i].r3);
+        fprintf(file_asm,"Operation :   %s | Registre 1 : %d | Registre 2 : %d | Registre 3 : %d\n", tab_instruction[i].operation, tab_instruction[i].r1, tab_instruction[i].r2, tab_instruction[i].r3);
     }
     fclose(file_asm);
 }

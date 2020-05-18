@@ -197,7 +197,6 @@ Declaration:Type tVAR
              strcpy(var,$2);
              pushSymbol($2,0,globalDepth);
              printf("Declaration 1\n");
-             //printSymbolTable();
             } AffectationDuringDeclaration MultipleDeclaration tSEMCOL
             | tCONST tINT tVAR 
             {
@@ -205,7 +204,6 @@ Declaration:Type tVAR
              strcpy(var,$3);
              pushSymbol($3,1,globalDepth);
              printf("Declaration 1 const\n");
-             //printSymbolTable();
             }AffectationDuringDeclaration MultipleDeclaration tSEMCOL
             ;
 
@@ -225,7 +223,7 @@ MultipleDeclaration: tSEP tVAR{
 
 AffectationDuringDeclaration: tEQUAL E 
                             {
-                            add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
+                            add_instruction("STORE", findSymbol(var,globalDepth),popTmp(), -1);
                             setInitialised(var,globalDepth);
                             free(var);
                             }
@@ -251,7 +249,7 @@ Aff:        tVAR
                         yyerror("Temptation to modify a constant ");
                     } 
                     else {
-                        add_instruction("STORE",popTmp(), findSymbol(var,globalDepth), -1);
+                        add_instruction("STORE",findSymbol(var,globalDepth),popTmp(), -1);
                         setInitialised(var,globalDepth);
                         free(var);
                     }
@@ -297,7 +295,7 @@ int main(void){
     
     yyparse();
     print_all();
-    print_binaire();
+    //print_binaire();
     printSymbolTable();
     return 0;
 }

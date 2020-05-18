@@ -1,7 +1,7 @@
 int main()
 { 
     int i, j,k ,r;
-    const int cs=500;
+    const int cs=50;
     i=3 ;
     j=4 ;
     k=8 ;
@@ -14,7 +14,7 @@ int main()
     else{
         i=i+1;
     }
-    k=500;
+    k=50;
 
     while(1==1){
         printf(j);
