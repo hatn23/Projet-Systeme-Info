@@ -33,8 +33,8 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity Processeur is
     Port ( CLK_PROC : in  STD_LOGIC;
-           RST_PROC : in  STD_LOGIC
-			  --INPUT_ADDR: in STD_LOGIC_VECTOR (7 downto 0);
+           RST_PROC : in  STD_LOGIC;
+			  INPUT_ADDR: in STD_LOGIC_VECTOR (7 downto 0)
 			  --QA: out STD_LOGIC_VECTOR (7 downto 0);
 			  --QB: out STD_LOGIC_VECTOR (7 downto 0)
 			  );
@@ -136,7 +136,7 @@ architecture Behavorial of Processeur is
 	signal waiting: boolean;
 	
 	--MemoireInstruction
-	signal IP : STD_LOGIC_VECTOR (7 downto 0):=x"00";
+	--signal IP : STD_LOGIC_VECTOR (7 downto 0):=x"00";
 	signal INSTR : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	
 	--BancDeRegistre
@@ -159,7 +159,7 @@ begin
 	
 		
 	Memoire_Instr : MemoireInstruction PORT MAP (
-		ADDR => IP,
+		ADDR => INPUT_ADDR,
 		CLK => CLK_PROC,
 		OUTPUT => INSTR
 	);
