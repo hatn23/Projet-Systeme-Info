@@ -90,7 +90,7 @@ architecture Behavorial of Processeur is
 	end component;
 	
 	component LC 
-		 Generic ( num : STD_LOGIC := '0'); -- nb LC
+		 Generic ( num : NATURAL := 0); -- nb LC
 		 Port ( 	OP : in  STD_LOGIC_VECTOR (7 downto 0);
 					outLC : out  STD_LOGIC );
 	end component;
@@ -288,14 +288,14 @@ begin
 	DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
 	
 	LC_MemD : LC
-	GENERIC MAP('1')
+	GENERIC MAP(1)
 	PORT MAP (
 			OP => EX_MEM_MEM_RE.OP,
 			outLC  => EX_MEM_LC_MEM_RE
 	);
 	
 	LC_MEM_RE : LC 
-	GENERIC MAP('0')
+	GENERIC MAP(0)
 	PORT MAP (
 			OP => MEM_RE_OUT.OP,
 			outLC  => MEM_RE_LC_OUT

@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity LC is
-	 Generic ( num : STD_LOGIC:='0');
+	 Generic ( num : NATURAL := 0);
     Port ( OP : in  STD_LOGIC_VECTOR (7 downto 0);
            outLC : out  STD_LOGIC);
 end LC;
@@ -39,8 +39,8 @@ architecture Behavioral of LC is
 
 begin
 	--AFC
-	outLC <= '1' when (num = '0' AND (OP=X"5" OR OP=X"6" OR OP=X"7" OR OP=X"1" OR OP=X"2" OR OP=X"3"  )) else -- LC registre AFC COP 
-			 '1' when (num = '1' AND (OP=X"8")) else --LC MEM LOAD STORE
+	outLC <= '1' when (num = 0 AND (OP=X"5" OR OP=X"6" OR OP=X"7" OR OP=X"1" OR OP=X"2" OR OP=X"3"  )) else -- LC registre AFC COP 
+			 '1' when (num = 1 AND (OP=X"8")) else --LC MEM LOAD STORE
 			 '0';
 
 end Behavioral;
