@@ -39,8 +39,8 @@ architecture Behavioral of LC is
 
 begin
 	--AFC
-	outLC <= '1' when (num = 0 AND (OP=X"5" OR OP=X"6" OR OP=X"7" OR OP=X"1" OR OP=X"2" OR OP=X"3"  )) else -- LC registre AFC COP 
-			 '1' when (num = 1 AND (OP=X"8")) else --LC MEM LOAD STORE
+	outLC <= '1' when (num = 0 AND (OP=x"05" OR OP=x"06" OR OP=x"07" OR OP=x"01" OR OP=x"02" OR OP=x"03"  )) else -- LC registre AFC COP 
+			 '1' when (num = 1 AND (OP=x"08")) else --LC MEM LOAD STORE
 			 '0';
 
 end Behavioral;
