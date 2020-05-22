@@ -89,7 +89,8 @@ architecture Behavorial of Processeur is
 					outC : out  STD_LOGIC_VECTOR (7 downto 0));
 	end component;
 	
-	component LC
+	component LC 
+		 Generic ( num : STD_LOGIC := '0'); -- nb LC
 		 Port ( 	OP : in  STD_LOGIC_VECTOR (7 downto 0);
 					outLC : out  STD_LOGIC );
 	end component;
@@ -264,7 +265,7 @@ begin
 	);
 	
 	MUX_MemD_IN : MUX
-	GENERIC MAP(3)
+	GENERIC MAP(4)
 	PORT MAP (
 			A => EX_MEM_MEM_RE.A,
 			B => EX_MEM_MEM_RE.B,
@@ -273,7 +274,7 @@ begin
 	);
 	
 	MUX_MemD_OUT : MUX
-	GENERIC MAP(4)
+	GENERIC MAP(3)
 	PORT MAP (
 			A => MemD_OUT,
 			B => EX_MEM_MEM_RE.B,
@@ -286,12 +287,16 @@ begin
 	
 	DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
 	
-	LC_MemD : LC PORT MAP (
+	LC_MemD : LC
+	GENERIC MAP('1')
+	PORT MAP (
 			OP => EX_MEM_MEM_RE.OP,
 			outLC  => EX_MEM_LC_MEM_RE
 	);
 	
-	LC_MEM_RE : LC PORT MAP (
+	LC_MEM_RE : LC 
+	GENERIC MAP('0')
+	PORT MAP (
 			OP => MEM_RE_OUT.OP,
 			outLC  => MEM_RE_LC_OUT
 	);

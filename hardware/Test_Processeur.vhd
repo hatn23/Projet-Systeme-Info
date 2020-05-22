@@ -18,9 +18,9 @@
           END COMPONENT;
 
           SIGNAL CLK_PROC :  std_logic := '0';
-          SIGNAL RST_PROC :  std_logic := '0';
+          SIGNAL RST_PROC :  std_logic := '1';
 			 
-			 constant CLK_PROC_period : time := 10 ns;
+			 constant CLK_PROC_period : time := 25 ns;
 
   BEGIN
 
