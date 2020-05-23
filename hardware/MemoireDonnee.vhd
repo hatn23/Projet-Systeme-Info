@@ -46,10 +46,10 @@ begin
 	process
 	begin
 		wait until CLK'event and CLK='1';
-			if(RST='0') then 
+			if(RST='1') then 
 				donnee<=(others => (others => '0'));
 			else 
-				if (RW='0') then --ecriture
+				if (RW='1') then --ecriture
 					donnee(to_integer(unsigned(ADDR)))<= INPUT;
 				else  --lecture
 					OUTPUT<= donnee(to_integer(unsigned(ADDR)));

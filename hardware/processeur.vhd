@@ -33,10 +33,10 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity Processeur is
     Port ( CLK_PROC : in  STD_LOGIC;
-           RST_PROC : in  STD_LOGIC
+           RST_PROC : in  STD_LOGIC;
 			  
-			  --QA: out STD_LOGIC_VECTOR (7 downto 0);
-			  --QB: out STD_LOGIC_VECTOR (7 downto 0)
+			  QA: out STD_LOGIC_VECTOR (7 downto 0);
+			  QB: out STD_LOGIC_VECTOR (7 downto 0)
 			  );
 end Processeur;
 
@@ -157,8 +157,8 @@ architecture Behavorial of Processeur is
 	
 begin
 
-	--QA<= REG_QA;
-	--QB<= REG_QB;
+	QA<= REG_QA;
+	QB<= REG_QB;
 	
 		
 	Memoire_Instr : MemoireInstruction PORT MAP (
@@ -239,8 +239,8 @@ begin
 	);	
 	
 	MemD : MemoireDonnee PORT MAP (
-		ADDR => EX_MEM_MUX_MemD_IN,
-		INPUT => EX_MEM_MEM_RE.B,
+		ADDR => EX_MEM_MEM_RE.A,
+		INPUT => REG_QA,
 		RW => EX_MEM_LC_MEM_RE,
 		RST => RST_PROC,
 		CLK => CLK_PROC,
@@ -304,26 +304,26 @@ begin
 	);
 	--gestion d'alea
 	--ADD SUB MUL COP
-	calcul<= LI_DI_DI_EX.OP = x"01" or LI_DI_DI_EX.OP = x"02" or LI_DI_DI_EX.OP = x"03" ;
-	store <= LI_DI_DI_EX.OP = x"08";
-	cop <= LI_DI_DI_EX.OP = x"05";
-	
-	diexW <= DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" or  
-				DI_EX_EX_MEM.OP = x"06" or DI_EX_EX_MEM.OP = x"07"	 ;
-
-	exmemW <= EX_MEM_MEM_RE.OP = x"01" or EX_MEM_MEM_RE.OP = x"02" or EX_MEM_MEM_RE.OP = x"03" or
-				 EX_MEM_MEM_RE.OP = x"06" or EX_MEM_MEM_RE.OP = x"07" or EX_MEM_MEM_RE.OP = x"11";
-				 
-	alea<= 	(calcul and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.C= DI_EX_EX_MEM.A or
-																LI_DI_DI_EX.B=EX_MEM_MEM_RE.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A))
-				or 
-				(cop and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.B=EX_MEM_MEM_RE.A ))
-				or
-				(store and (diexW or exmemW) and (LI_DI_DI_EX.C= DI_EX_EX_MEM.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A));
-				
+--	calcul<= LI_DI_DI_EX.OP = x"01" or LI_DI_DI_EX.OP = x"02" or LI_DI_DI_EX.OP = x"03" ;
+--	store <= LI_DI_DI_EX.OP = x"08";
+--	cop <= LI_DI_DI_EX.OP = x"05";
+--	
+--	diexW <= DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" or  
+--				DI_EX_EX_MEM.OP = x"06" or DI_EX_EX_MEM.OP = x"07"	 ;
+--
+--	exmemW <= EX_MEM_MEM_RE.OP = x"01" or EX_MEM_MEM_RE.OP = x"02" or EX_MEM_MEM_RE.OP = x"03" or
+--				 EX_MEM_MEM_RE.OP = x"06" or EX_MEM_MEM_RE.OP = x"07" or EX_MEM_MEM_RE.OP = x"11";
+--				 
+--	alea<= 	(calcul and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.C= DI_EX_EX_MEM.A or
+--																LI_DI_DI_EX.B=EX_MEM_MEM_RE.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A))
+--				or 
+--				(cop and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.B=EX_MEM_MEM_RE.A ))
+--				or
+--				(store and (diexW or exmemW) and (LI_DI_DI_EX.C= DI_EX_EX_MEM.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A));
+--				
 	process(CLK_PROC) 
 	begin
-		if(rising_edge(CLK_PROC) and not alea )then 
+		if(rising_edge(CLK_PROC) )then 
 			INPUT_ADDR<=INPUT_ADDR+x"01";
 		end if;
 	end process;

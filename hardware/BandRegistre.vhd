@@ -49,16 +49,14 @@ begin
 	process
 	begin
 		wait until CLK'event and CLK='1';
-			if(RST='0') then 
+			if(RST='1') then 
 				BR<=(others => (others => '0'));
 			else 
 				if (W='1') then --ecriture
-					BR(to_integer(unsigned(Addr_W)))<= DATA;
+					BR(conv_integer(Addr_W))<= DATA;
 				end if;
-				QA <= BR(to_integer(unsigned(Addr_A)));
-				QB <= BR(to_integer(unsigned(Addr_B)));
 			end if;
 	end process;
-	
+	QA <= BR(conv_integer(Addr_W))when (W='1' and ADDR_A=ADDR_W)else BR(conv_integer(Addr_A));
+	QB <= BR(conv_integer(Addr_B))when (W='1' and ADDR_B=ADDR_W) else BR(conv_integer(Addr_B));
 end Behavioral;
-
