@@ -7,7 +7,7 @@ int currentPosition = -1;
 
 int ESP = 0;
 
-int stackpointer= TABLESIZE;
+int stackpointer= -1;
 
 symbol *createSymbol(char *name, int isConstant, int depth)
 {
