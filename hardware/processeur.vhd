@@ -54,13 +54,13 @@ architecture Behavorial of Processeur is
 					S : out  STD_LOGIC_VECTOR (7 downto 0));
 	end component;
 	
-	component MUX 
-		Generic (num : NATURAL := 0); -- nb de MUX
-		Port (	A : in  STD_LOGIC_VECTOR (7 downto 0);
-					B : in  STD_LOGIC_VECTOR (7 downto 0);
-					OP : in  STD_LOGIC_VECTOR (7 downto 0);
-					S : out  STD_LOGIC_VECTOR (7 downto 0));
-	end component;
+--	component MUX 
+--		Generic (num : NATURAL := 0); -- nb de MUX
+--		Port (	A : in  STD_LOGIC_VECTOR (7 downto 0);
+--					B : in  STD_LOGIC_VECTOR (7 downto 0);
+--					OP : in  STD_LOGIC_VECTOR (7 downto 0);
+--					S : out  STD_LOGIC_VECTOR (7 downto 0));
+--	end component;
 	
 	component MemoireDonnee
 		 Port (	ADDR : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -89,11 +89,11 @@ architecture Behavorial of Processeur is
 					outC : out  STD_LOGIC_VECTOR (7 downto 0));
 	end component;
 	
-	component LC 
-		 Generic ( num : natural := 0); -- nb LC
-		 Port ( 	OP : in  STD_LOGIC_VECTOR (7 downto 0);
-					outLC : out  STD_LOGIC );
-	end component;
+--	component LC 
+--		 Generic ( num : natural := 0); -- nb LC
+--		 Port ( 	OP : in  STD_LOGIC_VECTOR (7 downto 0);
+--					outLC : out  STD_LOGIC );
+--	end component;
 	
 	component BandDeRegistre
 		Port (	Addr_A : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -239,69 +239,82 @@ begin
 	);	
 	
 	MemD : MemoireDonnee PORT MAP (
-		ADDR => EX_MEM_MEM_RE.A,
-		INPUT => REG_QA,
-		RW => EX_MEM_LC_MEM_RE,
+		ADDR => EX_MEM_MUX_MemD_IN ,
+		INPUT =>DI_EX_MUX_EX_MEM ,
+		RW => EX_MEM_LC_MEM_RE ,
 		RST => RST_PROC,
 		CLK => CLK_PROC,
-		OUTPUT => MemD_OUT
+		OUTPUT => MemD_OUT 
 	
 	);
 	
-	MUX_BdR : MUX
-	GENERIC MAP(1)
-	PORT MAP (
-			A => LI_DI_DI_EX.B,
-			B => REG_QA,
-			OP => LI_DI_DI_EX.OP,
-			S => LI_DI_MUX_DI_EX
-	);
-	
-	MUX_ALU : MUX
-	GENERIC MAP(2)
-	PORT MAP (
-			A => DI_EX_EX_MEM.B,
-			B => ALU_S,
-			OP => DI_EX_EX_MEM.OP,
-			S => DI_EX_MUX_EX_MEM
-	);
-	
-	MUX_MemD_IN : MUX
-	GENERIC MAP(4)
-	PORT MAP (
-			A => EX_MEM_MEM_RE.A,
-			B => EX_MEM_MEM_RE.B,
-			OP => EX_MEM_MEM_RE.OP,
-			S => EX_MEM_MUX_MemD_IN
-	);
-	
-	MUX_MemD_OUT : MUX
-	GENERIC MAP(3)
-	PORT MAP (
-			A => MemD_OUT,
-			B => EX_MEM_MEM_RE.B,
-			OP => EX_MEM_MEM_RE.OP,
-			S => MemD_OUT_MUX_MEM_RE
-	);
-	
+--	MUX_BdR : MUX
+--	GENERIC MAP(1)
+--	PORT MAP (
+--			A => LI_DI_DI_EX.B,
+--			B => REG_QA,
+--			OP => LI_DI_DI_EX.OP,
+--			S => LI_DI_MUX_DI_EX
+--	);
+--	
+--	MUX_ALU : MUX
+--	GENERIC MAP(2)
+--	PORT MAP (
+--			A => DI_EX_EX_MEM.B,
+--			B => ALU_S,
+--			OP => EX_MEM_MEM_RE.OP,
+--			S => DI_EX_MUX_EX_MEM
+--	);
+--	
+--	MUX_MemD_IN : MUX
+--	GENERIC MAP(4)
+--	PORT MAP (
+--			A => EX_MEM_MEM_RE.A,
+--			B => EX_MEM_MEM_RE.B,
+--			OP => EX_MEM_MEM_RE.OP,
+--			S => EX_MEM_MUX_MemD_IN
+--	);
+--	
+--	MUX_MemD_OUT : MUX
+--	GENERIC MAP(3)
+--	PORT MAP (
+--			A => MemD_OUT,
+--			B => EX_MEM_MEM_RE.B,
+--			OP => EX_MEM_MEM_RE.OP,
+--			S => MemD_OUT_MUX_MEM_RE
+--	);
+
+	--MUX 
+	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.OP = x"06" or LI_DI_DI_EX.OP = x"07" or LI_DI_DI_EX.OP = x"08" else REG_QA;
+	DI_EX_MUX_EX_MEM <= ALU_S when DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" else DI_EX_EX_MEM.B;
+	--store --a
+	EX_MEM_MUX_MemD_IN <= EX_MEM_MEM_RE.A when EX_MEM_MEM_RE.OP = x"08" else EX_MEM_MEM_RE.B;
+	MemD_OUT_MUX_MEM_RE <= MemD_OUT when EX_MEM_MEM_RE.OP = x"07" else EX_MEM_MEM_RE.B;
 	
 	--LC
 	
 	DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
+	--ecriture dans memD
+	EX_MEM_LC_MEM_RE <= '1' when EX_MEM_MEM_RE.OP = x"08" else '0';
+	--ecriture ds bdr
+	MEM_RE_LC_OUT  <= '1' when MEM_RE_OUT.OP = x"06" or  MEM_RE_OUT.OP = x"05"or MEM_RE_OUT.OP = x"07"or MEM_RE_OUT.OP=x"01" or MEM_RE_OUT.OP=x"02" or MEM_RE_OUT.OP=x"03" else '0';
+
 	
-	LC_MemD : LC
-	GENERIC MAP(1)
-	PORT MAP (
-			OP => EX_MEM_MEM_RE.OP,
-			outLC  => EX_MEM_LC_MEM_RE
-	);
 	
-	LC_MEM_RE : LC 
-	GENERIC MAP(0)
-	PORT MAP (
-			OP => MEM_RE_OUT.OP,
-			outLC  => MEM_RE_LC_OUT
-	);
+	
+--	LC_MemD : LC
+--	GENERIC MAP(1)
+--	PORT MAP (
+--			OP => EX_MEM_MEM_RE.OP,
+--			outLC  => EX_MEM_LC_MEM_RE
+--	);
+--	
+--	LC_MEM_RE : LC 
+--	GENERIC MAP(0)
+--	PORT MAP (
+--			OP => MEM_RE_OUT.OP,
+--			outLC  => MEM_RE_LC_OUT
+--	);
 	--gestion d'alea
 	--ADD SUB MUL COP
 --	calcul<= LI_DI_DI_EX.OP = x"01" or LI_DI_DI_EX.OP = x"02" or LI_DI_DI_EX.OP = x"03" ;
