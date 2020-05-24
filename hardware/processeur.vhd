@@ -134,8 +134,8 @@ architecture Behavorial of Processeur is
 	signal calcul: boolean;
 	signal store: boolean;
 	signal cop: boolean;
-	signal diexW: boolean;
-	signal exmemW: boolean;
+	signal diex: boolean;
+	signal exmem: boolean;
 	signal alea: boolean;
 	
 	--MemoireInstruction
@@ -240,7 +240,7 @@ begin
 	
 	MemD : MemoireDonnee PORT MAP (
 		ADDR => EX_MEM_MUX_MemD_IN ,
-		INPUT =>DI_EX_MUX_EX_MEM ,
+		INPUT =>EX_MEM_MEM_RE.B ,
 		RW => EX_MEM_LC_MEM_RE ,
 		RST => RST_PROC,
 		CLK => CLK_PROC,
@@ -285,7 +285,7 @@ begin
 --	);
 
 	--MUX 
-	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.OP = x"06" or LI_DI_DI_EX.OP = x"07" or LI_DI_DI_EX.OP = x"08" else REG_QA;
+	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.OP = x"06" or LI_DI_DI_EX.OP = x"07" else REG_QA;
 	DI_EX_MUX_EX_MEM <= ALU_S when DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" else DI_EX_EX_MEM.B;
 	--store --a
 	EX_MEM_MUX_MemD_IN <= EX_MEM_MEM_RE.A when EX_MEM_MEM_RE.OP = x"08" else EX_MEM_MEM_RE.B;
@@ -321,24 +321,31 @@ begin
 --	store <= LI_DI_DI_EX.OP = x"08";
 --	cop <= LI_DI_DI_EX.OP = x"05";
 --	
---	diexW <= DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" or  
---				DI_EX_EX_MEM.OP = x"06" or DI_EX_EX_MEM.OP = x"07"	 ;
+--	--en cas de ADD SUB MUL AFC LOAD
+--	diex <= DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" or  
+--			  DI_EX_EX_MEM.OP = x"06" or DI_EX_EX_MEM.OP = x"07"	 ;
 --
---	exmemW <= EX_MEM_MEM_RE.OP = x"01" or EX_MEM_MEM_RE.OP = x"02" or EX_MEM_MEM_RE.OP = x"03" or
+--	exmem <= EX_MEM_MEM_RE.OP = x"01" or EX_MEM_MEM_RE.OP = x"02" or EX_MEM_MEM_RE.OP = x"03" or
 --				 EX_MEM_MEM_RE.OP = x"06" or EX_MEM_MEM_RE.OP = x"07" or EX_MEM_MEM_RE.OP = x"11";
 --				 
---	alea<= 	(calcul and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.C= DI_EX_EX_MEM.A or
---																LI_DI_DI_EX.B=EX_MEM_MEM_RE.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A))
+--	alea<= 	(calcul and ((diex and (LI_DI_DI_EX.B = DI_EX_EX_MEM.A or LI_DI_DI_EX.C= DI_EX_EX_MEM.A))or
+--								(exmem and (LI_DI_DI_EX.B =EX_MEM_MEM_RE.A or LI_DI_DI_EX.C= EX_MEM_MEM_RE.A)))) 
 --				or 
---				(cop and (diexW or exmemW) and (LI_DI_DI_EX.B= DI_EX_EX_MEM.A or LI_DI_DI_EX.B=EX_MEM_MEM_RE.A ))
+--				(cop and ((diex and LI_DI_DI_EX.B = DI_EX_EX_MEM.A) or (exmem and LI_DI_DI_EX.B = EX_MEM_MEM_RE.A )))
 --				or
---				(store and (diexW or exmemW) and (LI_DI_DI_EX.C= DI_EX_EX_MEM.A or LI_DI_DI_EX.C=EX_MEM_MEM_RE.A));
+--				(store and ((diex and LI_DI_DI_EX.C = DI_EX_EX_MEM.A) or (exmem and LI_DI_DI_EX.C = EX_MEM_MEM_RE.A)));
 --				
 	process(CLK_PROC) 
 	begin
-		if(rising_edge(CLK_PROC) )then 
+		if(rising_edge(CLK_PROC))then 
 			INPUT_ADDR<=INPUT_ADDR+x"01";
+--		else 
+--			LI_DI_DI_EX.A<=0x"00";
+--			LI_DI_DI_EX.B<=0x"00";
+--			LI_DI_DI_EX.C<=0x"00";
+--			LI_DI_DI_EX.OP<=0x"00";
 		end if;
+		
 	end process;
 	
 

@@ -45,7 +45,7 @@ signal donnee: table ;
 begin
 	process
 	begin
-		wait until CLK'event and CLK='1';
+		wait until CLK'event and CLK='0';
 			if(RST='1') then 
 				donnee<=(others => (others => '0'));
 			else 
