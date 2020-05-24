@@ -43,7 +43,6 @@ ARCHITECTURE behavior OF Test_proc IS
  
     COMPONENT Processeur
     PORT(
-			INPUT_ADDR : IN std_logic_vector(7 downto 0);
          CLK_PROC : IN  std_logic;
          RST_PROC : IN  std_logic;
          QA : OUT  std_logic_vector(7 downto 0);
@@ -53,7 +52,6 @@ ARCHITECTURE behavior OF Test_proc IS
     
 
    --Inputs
-	signal INPUT_ADDR : std_logic_vector(7 downto 0);
    signal CLK_PROC : std_logic := '0';
    signal RST_PROC : std_logic := '0';
 
@@ -68,7 +66,6 @@ BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
    uut: Processeur PORT MAP (
-			 INPUT_ADDR => INPUT_ADDR,
           CLK_PROC => CLK_PROC,
           RST_PROC => RST_PROC,
           QA => QA,
@@ -94,13 +91,6 @@ BEGIN
       wait for CLK_PROC_period*10;
 
       -- insert stimulus here 
-		INPUT_ADDR<= x"00";
-		wait for CLK_PROC_period;
-		
-		for i in 0 to 255 loop
-			INPUT_ADDR <=  INPUT_ADDR+ x"1";
-			wait for CLK_PROC_period;
-		end loop;
 		
       wait;
    end process;
