@@ -176,7 +176,7 @@ While:      tWHILE  Condition {
                 $1=line;
             } Body{
                 int current = get_index_tab();
-                add_instruction("JMP",$1-1 ,-1,-1);
+                add_instruction("JMP",$1-3 ,-1,-1);
                 patch($1,current+1);
                 $1= current++;
             }
@@ -294,8 +294,8 @@ E:          tREAL       {
 int main(void){    
     
     yyparse();
-    print_all();
-    //print_binaire();
-    printSymbolTable();
+    //print_all();
+    print_binaire();
+    //printSymbolTable();
     return 0;
 }
